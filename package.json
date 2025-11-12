@@ -1,0 +1,16 @@
+{
+  "name": "my-sayang-signaling",
+  "version": "1.0.0",
+  "description": "Simple signaling + static server for collaborative drawing (My Sayang)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "ws": "^8.13.0"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}

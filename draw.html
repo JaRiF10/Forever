@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Drawing - My Sayang</title>
+  <style>
+    :root{--primary:#ff6b9d;--secondary:#c44569}
+    body{font-family:Segoe UI, Tahoma, Geneva, Verdana,sans-serif;margin:0;background:linear-gradient(135deg,#ffeaa7 0%,var(--primary) 100%);min-height:100vh;padding:0}
+    .navbar{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    .navbar a{color:white;text-decoration:none;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;transition:background 0.2s}
+    .navbar a:hover{background:rgba(255,255,255,0.2)}
+    .card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 5px 20px rgba(0,0,0,0.08);max-width:1100px;margin:20px auto}
+    .btn{padding:8px 12px;border-radius:8px;border:none;background:transparent;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:white}
+    #toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+    #webrtc-offer{width:100%;min-height:72px;border-radius:8px;border:1px solid #eee;padding:8px}
+    canvas{display:block;margin:0 auto;background:#fff;border-radius:8px}
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="javascript:goBackHome()" style="font-weight:bold;cursor:pointer">← Back to Home</a>
+    <h3 style="margin:0;flex:1;text-align:center">My Sayang</h3>
+    <div style="width:120px"></div>
+  </div>
+  <div class="card">
+    <h2 style="color:var(--primary);margin:0 0 8px">✏️ Relaxing</h2>
+    <p style="color:#999;margin:0 0 12px;font-size:14px">I know my queen you love drawing.</p>
+    <div id="toolbar">
+      <div>
+        <button class="btn" onclick="selectTool('pen')">✏️ Pen</button>
+        <button class="btn" onclick="selectTool('line')">📏 Line</button>
+        <button class="btn" onclick="selectTool('rect')">▭ Rect</button>
+        <button class="btn" onclick="selectTool('circle')">◯ Circle</button>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        Colors:
+        <button class="btn" onclick="setDrawColor('#000')" style="background:#000;width:28px;height:28px;border-radius:6px"></button>
+        <button class="btn" onclick="setDrawColor('#ff6b9d')" style="background:#ff6b9d;width:28px;height:28px;border-radius:6px"></button>
+        <button class="btn" onclick="setDrawColor('#ffc3a0')" style="background:#ffc3a0;width:28px;height:28px;border-radius:6px"></button>
+        <button class="btn" onclick="setDrawColor('#4ecdc4')" style="background:#4ecdc4;width:28px;height:28px;border-radius:6px"></button>
+        <input type="color" id="customColor" value="#000000" onchange="setDrawColor(this.value)" style="width:36px;height:36px;border:none;padding:0;border-radius:6px">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        Brush:
+        <input id="brushSize" type="range" min="1" max="30" value="3" onchange="setBrushSize(this.value)">
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px">
+        <button class="btn" onclick="undoDraw()">↶ Undo</button>
+        <button class="btn" onclick="clearDrawing()">🗑️ Clear</button>
+        <button class="btn btn-primary" onclick="saveDrawing()">💾 Save</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <div>Collaborative (auto-join public room):</div>
+      <div style="margin-left:auto;color:#666">Status: <span id="connStatus">disconnected</span></div>
+    </div>
+    <div style="margin-top:12px">
+      <canvas id="canvas" width="1000" height="600" style="border:3px solid var(--primary);max-width:100%;height:auto"></canvas>
+    </div>
+  </div>
+
+<script>
+// Standalone drawing app logic (copied and adapted from Index.html)
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
+let drawActions = [];
+let currentTool = 'pen';
+let currentBrush = 3;
+let currentColor = '#000000';
+let pc = null;
+let drawChannel = null;
+
+function setDrawColor(c) { currentColor = c; document.getElementById('customColor').value = c; }
+function setBrushSize(v){ currentBrush = Number(v); }
+function selectTool(t){ currentTool = t; }
+function undoDraw(){ if (drawActions.length) { drawActions.pop(); localStorage.setItem('draw_sync_ts', Date.now()); redrawAll(); } }
+function clearDrawing(){ drawActions = []; redrawAll(); localStorage.setItem('draw_sync_ts', Date.now()); }
+
+function drawStroke(action){
+  if (!ctx) return;
+  ctx.strokeStyle = action.color || '#000';
+  ctx.lineWidth = action.size || 3;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (action.tool === 'pen'){
+    ctx.beginPath();
+    const pts = action.points || [];
+    if (pts.length>0){ ctx.moveTo(pts[0].x, pts[0].y); for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y); ctx.stroke(); }
+  } else if (action.tool === 'line'){
+    ctx.beginPath(); ctx.moveTo(action.start.x, action.start.y); ctx.lineTo(action.end.x, action.end.y); ctx.stroke();
+  } else if (action.tool === 'rect'){
+    ctx.beginPath(); ctx.strokeRect(action.start.x, action.start.y, action.end.x-action.start.x, action.end.y-action.start.y);
+  } else if (action.tool === 'circle'){
+    const rx = (action.end.x-action.start.x); const ry = (action.end.y-action.start.y); ctx.beginPath(); ctx.ellipse(action.start.x+rx/2, action.start.y+ry/2, Math.abs(rx/2), Math.abs(ry/2), 0, 0, Math.PI*2); ctx.stroke();
+  }
+}
+
+function redrawAll(){ if (!ctx) return; ctx.clearRect(0,0,canvas.width,canvas.height); drawActions.forEach(a=>drawStroke(a)); }
+
+// Pointer drawing handlers
+let isDrawing=false, startX=0, startY=0;
+canvas.addEventListener('pointerdown', (e)=>{
+  isDrawing=true; const rect=canvas.getBoundingClientRect(); startX=e.clientX-rect.left; startY=e.clientY-rect.top;
+  if (currentTool==='pen') drawActions.push({tool:'pen', color:currentColor, size:currentBrush, points:[{x:startX,y:startY}]});
+});
+canvas.addEventListener('pointermove', (e)=>{
+  if (!isDrawing) return; const rect=canvas.getBoundingClientRect(); const x=e.clientX-rect.left; const y=e.clientY-rect.top;
+  if (currentTool==='pen'){
+    const action = drawActions[drawActions.length-1]; action.points.push({x,y}); drawStroke(action);
+    // send partials via dataChannel if available
+    if (drawChannel && drawChannel.readyState==='open') drawChannel.send(JSON.stringify({type:'draw_partial', point:{x,y}}));
+    // also send via WebSocket relay if connected (throttled)
+    if (ws && ws.readyState === WebSocket.OPEN){ queuePartialPoint({x,y}); }
+  } else {
+    redrawAll(); ctx.strokeStyle=currentColor; ctx.lineWidth=currentBrush; ctx.beginPath(); if (currentTool==='line'){ctx.moveTo(startX,startY);ctx.lineTo(x,y);ctx.stroke();} else if (currentTool==='rect'){ctx.strokeRect(startX,startY,x-startX,y-startY);} else if (currentTool==='circle'){const rx=(x-startX);const ry=(y-startY);ctx.beginPath();ctx.ellipse(startX+rx/2,startY+ry/2,Math.abs(rx/2),Math.abs(ry/2),0,0,Math.PI*2);ctx.stroke();}
+  }
+});
+canvas.addEventListener('pointerup',(e)=>{ if (!isDrawing) return; isDrawing=false; const rect=canvas.getBoundingClientRect(); const x=e.clientX-rect.left; const y=e.clientY-rect.top; if (currentTool!=='pen'){ const action={tool:currentTool,color:currentColor,size:currentBrush,start:{x:startX,y:startY},end:{x,y}}; drawActions.push(action); if (drawChannel && drawChannel.readyState==='open') drawChannel.send(JSON.stringify({type:'draw', action})); redrawAll(); } localStorage.setItem('draw_sync_ts', Date.now()); });
+canvas.addEventListener('pointerleave', ()=>{ isDrawing=false; });
+
+function saveDrawing(){ redrawAll(); const data = canvas.toDataURL('image/png'); const images = JSON.parse(localStorage.getItem('gallery')||'[]'); images.push({id:Date.now(), data}); localStorage.setItem('gallery', JSON.stringify(images)); localStorage.setItem('gallery_sync_ts', Date.now()); alert('✅ Drawing saved to gallery!'); }
+
+// --- WebSocket relay helpers: batch/throttle partial points to avoid flooding ---
+let pendingPoints = [];
+let pendingTimer = null;
+function queuePartialPoint(pt){ pendingPoints.push(pt); if (pendingTimer) return; pendingTimer = setTimeout(()=>{ flushPendingPoints(); }, 40); }
+function flushPendingPoints(){ if (!ws || ws.readyState !== WebSocket.OPEN) { pendingPoints=[]; pendingTimer=null; return; } const pts = pendingPoints.splice(0); pendingTimer = null; ws.send(JSON.stringify({ type:'draw_partial', points: pts })); }
+
+// send full action to server if present
+function sendActionToServer(action){ if (ws && ws.readyState === WebSocket.OPEN){ ws.send(JSON.stringify({ type:'draw', action })); } }
+
+// Automatic signaling via WebSocket server
+let ws = null;
+let myId = null;
+let otherId = null;
+
+function setStatus(s){ document.getElementById('connStatus').textContent = s; }
+
+function connectToRoom(room){
+  if (!room) room = 'public-room';
+  const url = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws';
+  ws = new WebSocket(url);
+  ws.onopen = ()=>{ setStatus('connected (joining)'); ws.send(JSON.stringify({type:'join', room})); };
+  ws.onclose = ()=>{ setStatus('disconnected'); ws=null; myId=null; otherId=null; };
+  ws.onerror = (e)=>{ console.error('WS', e); setStatus('error'); };
+  ws.onmessage = async (ev)=>{
+    try{
+      const msg = JSON.parse(ev.data);
+      if (msg.type==='joined'){ myId = msg.you; const peers = msg.peers || []; // peers contains other ids
+        if (peers.length>0) otherId = peers[0]; setStatus('joined, peers: '+peers.length);
+      } else if (msg.type==='initiate'){
+        // server asks the existing client to initiate offer to the newcomer
+        const target = msg.to; otherId = target; await createOfferTo(target);
+      } else if (msg.type==='signal'){
+        const from = msg.from; otherId = from; const data = msg.data;
+        if (data.sdp){
+          if (data.sdp.type==='offer'){
+            await ensurePeer(); await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+            const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+            ws.send(JSON.stringify({type:'signal', to:from, from:myId, data:{sdp:pc.localDescription}}));
+          } else if (data.sdp.type==='answer'){
+            await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+          }
+        } else if (data.candidate){
+          if (pc) await pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+        }
+      } else if (msg.type==='draw' || msg.type==='draw_partial' || msg.type==='control'){
+        // relay incoming draw messages from server
+        if (msg.type==='draw'){
+          drawActions.push(msg.action); drawStroke(msg.action);
+        } else if (msg.type==='draw_partial'){
+          const last = drawActions[drawActions.length-1];
+          if (last && last.tool==='pen'){
+            if (msg.points && Array.isArray(msg.points)){
+              msg.points.forEach(p=>{ last.points.push(p); });
+              drawStroke(last);
+            } else if (msg.point){ last.points.push(msg.point); drawStroke(last); }
+          }
+        }
+      }
+    }catch(err){ console.error('ws msg err', err); }
+  };
+}
+
+function leaveRoom(){ if (ws) ws.close(); if (pc) pc.close(); pc=null; drawChannel=null; setStatus('disconnected'); }
+
+async function ensurePeer(){ if (pc) return; pc = new RTCPeerConnection({iceServers:[{urls:['stun:stun.l.google.com:19302']}]});
+  pc.onicecandidate = (e)=>{ if (e.candidate && otherId && ws && myId){ ws.send(JSON.stringify({type:'signal', to:otherId, from:myId, data:{candidate:e.candidate}})); } };
+  pc.ondatachannel = (ev)=>{ setupDrawChannel(ev.channel); };
+}
+
+async function createOfferTo(targetId){ await ensurePeer(); const channel = pc.createDataChannel('draw'); setupDrawChannel(channel);
+  const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+  if (ws && myId){ ws.send(JSON.stringify({type:'signal', to:targetId, from:myId, data:{sdp:pc.localDescription}})); }
+}
+
+function setupDrawChannel(channel){ drawChannel = channel; channel.onopen = ()=>{ setStatus('peer channel open'); }; channel.onmessage = (ev)=>{ try{ const data = JSON.parse(ev.data); if (data.type==='draw'){ drawActions.push(data.action); drawStroke(data.action); } else if (data.type==='draw_partial'){ const last = drawActions[drawActions.length-1]; if (last && last.tool==='pen'){ last.points.push(data.point); drawStroke(last); } } }catch(e){console.error('draw msg',e);} } }
+
+// Auto-connect to the permanent public room on load
+window.addEventListener('load', ()=>{ try{ connectToRoom('public-room'); }catch(e){ console.error('autoconnect', e); } });
+// keep leave handler available in console
+window.leaveDrawingRoom = leaveRoom;
+
+// Go back to home while preserving logged-in state
+function goBackHome(){
+  // Check if user is logged in
+  const currentUser = localStorage.getItem('currentUserEmail');
+  if (currentUser){
+    // User is logged in; go back to Index.html and it should show home (not login)
+    window.location.href = 'Index.html';
+  } else {
+    // Not logged in; just go back
+    window.location.href = 'Index.html';
+  }
+}
+
+// If server relays drawing, apply incoming draw messages from server (non-RTC)
+// We already handle signaling WS messages in connectToRoom(); add parsing for draw messages there.
+// To ensure messages are handled even before connection method placement, attach a general handler (it will be replaced when ws connects)
+// Note: the connectToRoom() sets ws.onmessage; we ensure draw messages are processed in that handler.
+
+// storage sync: if drawings updated elsewhere, reload actions from storage (if using persistent actions storage)
+window.addEventListener('storage', (e)=>{ if (e.key==='gallery' || e.key==='draw_sync_ts') { /* nothing to auto-load, actions are volatile */ redrawAll(); } });
+
+// initial drawActions may be empty
+redrawAll();
+</script>
+</body>
+</html>

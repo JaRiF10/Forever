@@ -1,0 +1,10 @@
+Plan: Update draw.html to auto-join 'public-room' on load and remove room input UI.
+
+Edits to make:
+- Remove the <input id="roomId"> and Connect/Leave buttons HTML
+- On load, call connectToRoomWithId('public-room') which will set up ws and join the room
+- Modify connectToRoom to accept a room parameter and not read from DOM when called programmatically
+- Hide the Status text or keep it but auto-update
+- Ensure that incoming non-signal messages (draw/draw_partial) are applied from ws.onmessage as well
+
+I'll now apply these edits.

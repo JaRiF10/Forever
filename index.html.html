@@ -1,0 +1,2868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Sayang</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #c44569;
+            --accent: #ffc3a0;
+            --light: #ffeaa7;
+            --dark: #2d3436;
+            --pink-bg: #ffe0ec;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, var(--primary) 100%);
+            min-height: 100vh;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffeaa7 0%, #ff6b9d 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            gap: 30px;
+        }
+
+        #loading-screen.hidden {
+            display: none !important;
+        }
+
+        .loading-cake {
+            font-size: 80px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        .loading-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            background: var(--pink-bg);
+            padding: 25px 50px;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(196, 69, 105, 0.3);
+            border: 3px solid var(--primary);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--pink-bg);
+            border-top: 6px solid var(--primary);
+            border-right: 6px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .auth-overlay.hidden {
+            display: none !important;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        @keyframes confettiFall {
+            from { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input, textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-group input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        .auth-btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 14px;
+            background: #ffe0e0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .success-message {
+            color: #51cf66;
+            text-align: center;
+            font-size: 14px;
+            background: #e0ffe0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .demo-credentials {
+            text-align: center;
+            color: #888;
+            margin-top: 15px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .app-container {
+
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Animated overlay menu */
+        .nav-hamburger {
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            display: none;
+            z-index: 1200;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .app-menu-panel {
+            width: 100%;
+            max-width: 420px;
+            height: 70vh;
+            background: linear-gradient(180deg,#fff,#fff);
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
+            transform: translateY(100%);
+            animation: slideUpPanel 360ms cubic-bezier(.2,.9,.26,1) forwards;
+            overflow: hidden;
+            display:flex;
+            flex-direction:column;
+        }
+
+        @keyframes slideUpPanel {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0%); }
+        }
+
+        .app-menu-header { padding: 14px 16px; border-bottom:1px solid #f3f3f3; display:flex; align-items:center; justify-content:space-between; }
+        .app-menu-list { overflow:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
+        .app-menu-item { padding:12px 14px; border-radius:10px; cursor:pointer; transition:all .18s ease; background:#fff; border:1px solid #faf0f4; }
+        .app-menu-item:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(255,107,157,0.12); }
+
+        .nav-link {
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            border: none;
+            background: none;
+        }
+
+        .nav-link:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 30px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 30px auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown-title {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+        }
+
+        .countdown-item {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        }
+
+        .countdown-value {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .countdown-label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Welcome cookie animation */
+        .welcome-cookie {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 3000;
+            background: #fff3f6;
+            border: 3px solid var(--primary);
+            padding: 12px 16px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(196,69,105,0.15);
+            transform-origin: center;
+            animation: cookie-bounce 1.2s ease forwards;
+        }
+
+        .welcome-cookie .cookie-emoji { font-size: 28px; }
+        .welcome-cookie .cookie-text { font-weight: 700; color: var(--dark); }
+
+        @keyframes cookie-bounce {
+            0% { transform: translateY(40px) scale(0.8); opacity: 0; }
+            50% { transform: translateY(-10px) scale(1.05); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            height: 200px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .note-item {
+            background: var(--pink-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .note-item p {
+            color: var(--dark);
+            margin-bottom: 10px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .note-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .navbar-menu {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loading-cake">🎂</div>
+        <div class="spinner"></div>
+        <div class="loading-text">Loading your birthday website...</div>
+    </div>
+
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>🎂 Welcome Sayang! 💕</h1>
+                <p id="auth-subtitle">Enter your credentials to unlock</p>
+            </div>
+            
+            <!-- Login Form -->
+            <form class="auth-form" id="login-form" style="display: block;">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" placeholder="Enter your email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="auth-btn">Unlock 💕</button>
+                <div id="login-message"></div>
+                <p style="text-align: center; margin-top: 15px; color: #888; font-size: 14px;">
+                    Don't have an account? <button type="button" onclick="App.switchToSignup()" style="background: none; border: none; color: var(--primary); text-decoration: underline; cursor: pointer; font-weight: bold;">Sign Up Here</button>
+                </p>
+            </form>
+
+            <!-- Signup Form -->
+            <form class="auth-form" id="signup-form" style="display: none;">
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" placeholder="Confirm password" required>
+                </div>
+                <button type="submit" class="auth-btn">Request to Join 🎉</button>
+                <div id="signup-message"></div>
+                <p style="text-align: center; margin-top: 15px; color: #888; font-size: 14px;">
+                    Already have an account? <button type="button" onclick="App.switchToLogin()" style="background: none; border: none; color: var(--primary); text-decoration: underline; cursor: pointer; font-weight: bold;">Login Here</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app" class="app-container" style="display: none;">
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-brand">🎂 My Sayang's Birthday 💕</div>
+                <div class="navbar-menu">
+                    <button class="nav-hamburger" onclick="App.toggleMenu()" title="Menu">☰</button>
+                    <button class="nav-btn" onclick="App.logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Animated Overlay Menu -->
+        <div id="app-menu" class="app-menu-overlay" onclick="if(event.target.id==='app-menu')App.closeMenu()">
+            <div class="app-menu-panel">
+                <div class="app-menu-header">
+                    <div style="font-weight:700;color:var(--primary);font-size:16px;">Menu</div>
+                    <button class="nav-hamburger" onclick="App.closeMenu()" title="Close">✕</button>
+                </div>
+                <div class="app-menu-list" id="app-menu-list">
+                    <div class="app-menu-item" onclick="App.menuNavigate('home')">🏠 Home</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('diary')">📔 Diary</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('notes')">📝 Notes</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('gallery')">🖼️ Gallery</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('wishes')">💑 Wish List</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('voice')">🎤 Voice</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('letters')">✉️ Letters</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('promises')">🤝 Promises</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('capsule')">⏰ Time Capsule</div>
+                    <div class="app-menu-item" onclick="window.open('draw.html','_blank');App.closeMenu()">✏️ Draw (new tab)</div>
+                    <div class="app-menu-item" onclick="App.menuNavigate('settings')">⚙️ Settings</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="page-content"></div>
+        </div>
+    </div>
+
+    <!-- Background Music Player -->
+    <audio id="bg-music" preload="auto" loop style="display:none;"></audio>
+    <button id="music-toggle" title="Toggle Background Music" style="position:fixed;bottom:30px;right:30px;z-index:3000;background:linear-gradient(135deg,#ff6b9d,#ffc3a0);color:#fff;border:none;border-radius:50%;width:56px;height:56px;box-shadow:0 8px 30px rgba(255,107,157,0.18);font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s ease;padding:0;">
+        🔊
+    </button>
+    <script>
+        // === Background Music Logic ===
+        // ADD YOUR MUSIC FILES HERE - Replace or add more tracks:
+      const MUSIC_TRACKS = [
+    'music\Sufian Suhaimi - Terasa Ada (Official Lyric Video).mp3',
+    'music\LEVEL FIVE - 60\'s LOVE.mp3',
+    'music\Taylor Swift - Daylight (Official Audio).mp3'
+];
+        
+        let musicEnabled = localStorage.getItem('musicEnabled') !== '0'; // true by default
+        let currentTrackIdx = 0;
+        let musicInitialized = false;
+        let availableTracks = []; // tracks that actually exist
+        const musicEl = document.getElementById('bg-music');
+        const musicToggleBtn = document.getElementById('music-toggle');
+
+        function pickRandomTrackIdx() {
+            if (!availableTracks.length) return 0;
+            return Math.floor(Math.random() * availableTracks.length);
+        }
+
+        function playMusic(idx) {
+            if (!availableTracks.length) {
+                console.warn('No music tracks available. Please add music files to the music/ folder.');
+                return;
+            }
+            if (idx >= availableTracks.length) idx = 0;
+            currentTrackIdx = idx;
+            musicEl.src = availableTracks[currentTrackIdx];
+            musicEl.currentTime = 0;
+            if (musicEnabled) {
+                musicEl.play().catch(()=>{
+                    console.log('Music autoplay blocked by browser. Will start on user interaction.');
+                });
+            }
+        }
+
+        function nextTrack() {
+            if (!availableTracks.length) return;
+            currentTrackIdx = (currentTrackIdx + 1) % availableTracks.length;
+            playMusic(currentTrackIdx);
+        }
+
+        function toggleMusic(forceState) {
+            if (typeof forceState === 'boolean') musicEnabled = forceState;
+            else musicEnabled = !musicEnabled;
+            localStorage.setItem('musicEnabled', musicEnabled ? '1' : '0');
+            if (musicEnabled) {
+                musicEl.play().catch(()=>{});
+                musicToggleBtn.innerHTML = '🔊';
+                musicToggleBtn.title = 'Music is ON - Click to turn off';
+            } else {
+                musicEl.pause();
+                musicToggleBtn.innerHTML = '🔇';
+                musicToggleBtn.title = 'Music is OFF - Click to turn on';
+            }
+        }
+
+        function setupMusicPlayer() {
+            // Try to detect which tracks actually exist
+            availableTracks = MUSIC_TRACKS.filter(t => t); // filter out empty strings
+            
+            // Always show the button regardless of whether tracks exist
+            musicToggleBtn.style.display = 'flex';
+            musicToggleBtn.onclick = () => toggleMusic();
+            
+            // Initialize UI
+            if (musicEnabled) {
+                musicToggleBtn.innerHTML = '🔊';
+                musicToggleBtn.title = 'Music is ON - Click to turn off';
+            } else {
+                musicToggleBtn.innerHTML = '🔇';
+                musicToggleBtn.title = 'Music is OFF - Click to turn on';
+            }
+            
+            // If we have tracks, set up playback
+            if (availableTracks.length > 0) {
+                currentTrackIdx = pickRandomTrackIdx();
+                playMusic(currentTrackIdx);
+                
+                // On track end, play next
+                musicEl.onended = () => {
+                    nextTrack();
+                    localStorage.setItem('musicTrackIdx', currentTrackIdx);
+                };
+                
+                // Save track idx on play
+                musicEl.onplay = () => {
+                    localStorage.setItem('musicTrackIdx', currentTrackIdx);
+                };
+            } else {
+                console.log('🎵 Music player ready. Add music files to /music folder and update MUSIC_TRACKS array.');
+            }
+        }
+
+        // Wait for user interaction to start music (browser policy)
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMusicPlayer();
+            // Try to autoplay after first user interaction
+            if (!musicInitialized && availableTracks.length > 0) {
+                const tryInit = () => {
+                    if (!musicInitialized) {
+                        if (musicEnabled && availableTracks.length > 0) {
+                            musicEl.play().catch(()=>{});
+                        }
+                        musicInitialized = true;
+                    }
+                };
+                document.body.addEventListener('click', tryInit, { once: true });
+                document.body.addEventListener('keydown', tryInit, { once: true });
+            } else {
+                musicInitialized = true;
+            }
+        });
+
+        // === END Background Music Logic ===
+
+        const App = {
+            currentPage: 'home',
+            isLoggedIn: false,
+            drawCanvas: null,
+            drawCtx: null,
+            currentDrawColor: '#000000',
+
+            init() {
+                setTimeout(() => {
+                    this.hideLoadingScreen();
+                    // Check if user is already logged in
+                    const currentUser = localStorage.getItem('currentUserEmail');
+                    if (currentUser) {
+                        // User is logged in; set up app state similar to login
+                        this.isLoggedIn = true;
+                        document.getElementById('auth-overlay').classList.add('hidden');
+                        document.getElementById('app').style.display = 'flex';
+                        this.showWelcomeAnimation();
+                        this.goToPage('home');
+                        this.updateCountdown && this.updateCountdown();
+                        try{ setInterval(() => this.updateCountdown && this.updateCountdown(), 1000); }catch(e){}
+                    } else {
+                        // User is not logged in; show login form
+                        this.setupLoginForm();
+                    }
+                    this.initSyncListeners();
+                }, 1000);
+            },
+
+            hideLoadingScreen() {
+                document.getElementById('loading-screen').classList.add('hidden');
+            },
+
+            setupLoginForm() {
+                document.getElementById('login-form').addEventListener('submit', (e) => this.handleLogin(e));
+                document.getElementById('signup-form').addEventListener('submit', (e) => this.handleSignup(e));
+            },
+
+            switchToSignup() {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('signup-form').style.display = 'block';
+                document.getElementById('auth-subtitle').textContent = 'Create an account to join';
+                document.getElementById('auth-overlay').classList.remove('hidden');
+            },
+
+            switchToLogin() {
+                document.getElementById('signup-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('auth-subtitle').textContent = 'Enter your credentials to unlock';
+                document.getElementById('auth-overlay').classList.remove('hidden');
+            },
+
+            handleSignup(event) {
+                event.preventDefault();
+                const email = document.getElementById('signup-email').value.trim().toLowerCase();
+                const password = document.getElementById('signup-password').value;
+                const confirm = document.getElementById('signup-confirm').value;
+                const messageDiv = document.getElementById('signup-message');
+
+                if (password !== confirm) {
+                    messageDiv.className = 'error-message';
+                    messageDiv.textContent = '❌ Passwords do not match!';
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.email === email)) {
+                    messageDiv.className = 'error-message';
+                    messageDiv.textContent = '❌ Email already exists!';
+                    return;
+                }
+
+                // Auto-create the account (no manual approval)
+                // 'users' is already defined above in this scope
+                users.push({ email, password, location: null });
+                localStorage.setItem('users', JSON.stringify(users));
+
+                messageDiv.className = 'success-message';
+                messageDiv.textContent = '✅ Account created! You can now login.';
+                // Show welcome cookie animation on sign up
+                this.showWelcomeAnimation();
+                setTimeout(() => {
+                    document.getElementById('signup-form').reset();
+                    this.switchToLogin();
+                }, 1400);
+            },
+
+            handleLogin(event) {
+                event.preventDefault();
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const password = document.getElementById('login-password').value;
+                const messageDiv = document.getElementById('login-message');
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.length === 0) {
+                    users = [{ email: 'admin@example.com', password: 'myqueen', location: null }];
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    messageDiv.className = 'success-message';
+                    messageDiv.textContent = '✅ Login successful!';
+                    localStorage.setItem('currentUserEmail', email);
+                    setTimeout(() => {
+                        this.isLoggedIn = true;
+                        document.getElementById('auth-overlay').classList.add('hidden');
+                        document.getElementById('app').style.display = 'flex';
+                        // Removed search-history download gating
+                        // Show welcome animation on login
+                        this.showWelcomeAnimation();
+                        this.goToPage('home');
+                        this.updateCountdown();
+                        setInterval(() => this.updateCountdown(), 1000);
+                    }, 1000);
+                } else {
+                    messageDiv.className = 'error-message';
+                    messageDiv.textContent = '❌ Invalid email or password!';
+                }
+            },
+
+            logout() {
+                if (confirm('Are you sure you want to logout?')) {
+                    this.isLoggedIn = false;
+                    document.getElementById('auth-overlay').classList.remove('hidden');
+                    document.getElementById('app').style.display = 'none';
+                    document.getElementById('login-form').reset();
+                    document.getElementById('signup-form').reset();
+                    document.getElementById('login-message').textContent = '';
+                    document.getElementById('signup-message').textContent = '';
+                    localStorage.removeItem('currentUserEmail');
+                }
+            },
+
+            showWelcomeAnimation() {
+                const container = document.body;
+                const welcome = document.createElement('div');
+                welcome.className = 'welcome-cookie';
+                welcome.innerHTML = `<span class="cookie-emoji">🍪</span><span class="cookie-text">Welcome my Queen. 👑</span>`;
+                container.appendChild(welcome);
+                setTimeout(() => welcome.remove(), 3000);
+            },
+
+            goToPage(page) {
+                this.currentPage = page;
+                this.renderPage();
+            },
+
+            toggleMenu() {
+                const menu = document.getElementById('app-menu');
+                if (menu.style.display === 'flex') {
+                    this.closeMenu();
+                } else {
+                    this.openMenu();
+                }
+            },
+
+            openMenu() {
+                const menu = document.getElementById('app-menu');
+                menu.style.display = 'flex';
+            },
+
+            closeMenu() {
+                const menu = document.getElementById('app-menu');
+                menu.style.display = 'none';
+            },
+
+            menuNavigate(page) {
+                this.closeMenu();
+                this.goToPage(page);
+            },
+
+            renderPage() {
+                const content = document.getElementById('page-content');
+                let searchBar = '';
+                if (this.isLoggedIn) {
+                    searchBar = `<form id="search-form" style="margin-bottom:20px;display:flex;gap:10px;"><input type="text" id="search-query" placeholder="Search..." style="flex:1;padding:10px;border-radius:8px;border:2px solid #e0e0e0;"/><button type="submit" class="btn btn-primary">🔍</button></form>`;
+                }
+                switch(this.currentPage) {
+                    case 'home': content.innerHTML = searchBar + this.getHomePage(); break;
+                    case 'diary': content.innerHTML = searchBar + this.getDiaryPage(); this.setupDiaryListeners(); break;
+                    case 'notes': content.innerHTML = searchBar + this.getNotesPage(); this.setupNotesListeners(); break;
+                    case 'gallery': content.innerHTML = searchBar + this.getGalleryPage(); this.setupGalleryListeners(); break;
+                    case 'wishes': content.innerHTML = searchBar + this.getWishesPage(); this.setupWishesListeners(); break;
+                    case 'capsule': content.innerHTML = searchBar + this.getTimeCapsulePage(); this.setupCapsuleListeners(); break;
+                    case 'draw': content.innerHTML = searchBar + this.getDrawPage(); setTimeout(() => this.setupDrawing(), 100); break;
+                    case 'voice': content.innerHTML = searchBar + this.getVoicePage(); setTimeout(() => { this.setupVoiceListeners(); this.fetchVoiceList(); }, 100); break;
+                    case 'letters': content.innerHTML = searchBar + this.getLettersPage(); setTimeout(() => { this.setupLettersListeners(); }, 100); break;
+                    case 'promises': content.innerHTML = searchBar + this.getPromisesPage(); setTimeout(() => { this.setupPromisesListeners(); }, 100); break;
+                    case 'settings': content.innerHTML = this.getSettingsPage(); this.setupSettingsListeners(); break;
+                }
+                                if (document.getElementById('search-form')) {
+                                        document.getElementById('search-form').addEventListener('submit', (e) => {
+                                                e.preventDefault();
+                                                const query = document.getElementById('search-query').value.trim();
+                                                // Search input retained for UI, but history logging has been removed per configuration.
+                                                if (query) {
+                                                    document.getElementById('search-query').value = '';
+                                                }
+                                        });
+                                }
+                window.scrollTo(0, 0);
+            },
+
+                        
+            getHomePage() {
+                return `<div class="hero"><h1 class="hero-title">💕 Our Love Story 💕</h1><p class="hero-subtitle">Together, counting every moment with you</p><div class="countdown"><div class="countdown-title">⏰ We've Been Together</div><div class="countdown-grid"><div class="countdown-item"><div class="countdown-value" id="years">1</div><div class="countdown-label">Years</div></div><div class="countdown-item"><div class="countdown-value" id="days">18</div><div class="countdown-label">Days</div></div><div class="countdown-item"><div class="countdown-value" id="hours">0</div><div class="countdown-label">Hours</div></div><div class="countdown-item"><div class="countdown-value" id="minutes">0</div><div class="countdown-label">Minutes</div></div><div class="countdown-item"><div class="countdown-value" id="seconds">0</div><div class="countdown-label">Seconds</div></div></div></div><div class="card" style="margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;"><h2 style="color: var(--primary); margin-bottom: 20px;">💑 Our Special Website 💑</h2><p style="color: #555; line-height: 1.8; font-size: 16px;">This is our sacred space where you can:</p><ul style="margin-top: 15px; line-height: 2; color: #555; list-style-position: inside;"><li>📔 Write daily diary entries</li><li>📝 Save quick notes easily</li><li>📸 Upload and store beautiful photos</li><li>🎁 Create your wishes list</li><li>✏️ Draw and create artwork</li><li>🔐 Everything is safe and secure</li></ul></div></div>`;
+            },
+
+                        getDiaryPage() {
+                                // Calendar-driven diary UI with privacy and tags
+                                return `
+                                    <h2 style="color:var(--primary);margin-bottom:20px;">📔 My Diary</h2>
+                                    <div class="card" style="margin-bottom:20px; display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
+                                        <div style="min-width:320px; max-width:420px;">
+                                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                                <button class="btn" id="cal-prev">◀</button>
+                                                <div style="font-weight:700;"> <span id="cal-month"></span> <span id="cal-year"></span></div>
+                                                <button class="btn" id="cal-next">▶</button>
+                                            </div>
+                                            <div id="calendar" style="background:#fff;padding:12px;border-radius:8px;border:1px solid #f0f0f0;"></div>
+                                            <div style="margin-top:10px; font-size:13px;color:#666;">Select a date to read or add diary entries. Public entries are visible to others.</div>
+                                        </div>
+                                        <div style="flex:1; min-width:320px;">
+                                            <div class="card" style="padding:16px;">
+                                                <h3 style="margin-bottom:10px;">✍️ Entry for <span id="selected-date-display"></span></h3>
+                                                <form id="diary-form">
+                                                    <div class="form-group"><label for="diary-title">Title (optional)</label><input type="text" id="diary-title" placeholder="Title"></div>
+                                                    <div class="form-group"><label for="diary-content">Your Entry</label><textarea id="diary-content" style="min-height:140px;" required></textarea></div>
+                                                    <div class="form-group" style="display:flex;gap:10px;align-items:center;">
+                                                        <label for="diary-public">Make public</label>
+                                                        <input type="checkbox" id="diary-public">
+                                                        <label for="diary-mood">Mood</label>
+                                                        <select id="diary-mood"><option>😊</option><option>😅</option><option>😢</option><option>😍</option><option>😡</option></select>
+                                                        <input id="diary-tags" placeholder="tags (comma separated)" style="flex:1;padding:8px;border:1px solid #eee;border-radius:6px;">
+                                                    </div>
+                                                    <div style="display:flex;gap:10px;margin-top:10px;"><button type="submit" class="btn btn-primary">💾 Save</button><button type="button" class="btn" id="diary-clear">🧹 Clear</button><button type="button" class="btn" id="diary-view-public">🌐 View Public</button></div>
+                                                </form>
+                                            </div>
+                                            <div id="diary-entries" style="margin-top:14px;"></div>
+                                        </div>
+                                    </div>
+                                `;
+                        },
+
+            setupDiaryListeners() {
+                // Calendar state
+                this.calDate = new Date();
+                this.selectedDiaryDate = this.formatDate(new Date());
+                const render = () => this.renderCalendar(this.calDate.getMonth(), this.calDate.getFullYear());
+                document.getElementById('cal-prev').addEventListener('click', () => { this.calDate.setMonth(this.calDate.getMonth()-1); render(); });
+                document.getElementById('cal-next').addEventListener('click', () => { this.calDate.setMonth(this.calDate.getMonth()+1); render(); });
+                render();
+
+                document.getElementById('diary-clear').addEventListener('click', () => {
+                    document.getElementById('diary-title').value = '';
+                    document.getElementById('diary-content').value = '';
+                    document.getElementById('diary-public').checked = false;
+                    document.getElementById('diary-tags').value = '';
+                });
+
+                document.getElementById('diary-view-public').addEventListener('click', () => {
+                    this.showPublicDiaries();
+                });
+
+                document.getElementById('diary-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('diary-title').value.trim();
+                    const content = document.getElementById('diary-content').value.trim();
+                    const isPublic = !!document.getElementById('diary-public').checked;
+                    const mood = document.getElementById('diary-mood').value;
+                    const tags = (document.getElementById('diary-tags').value || '').split(',').map(t=>t.trim()).filter(Boolean);
+                    if (!content) return alert('Please write something.');
+                    const diaries = JSON.parse(localStorage.getItem('diaries') || '[]');
+                    const entry = { id: Date.now(), title, content, date: this.selectedDiaryDate, owner: localStorage.getItem('currentUserEmail') || 'guest', public: isPublic, mood, tags };
+                    diaries.push(entry);
+                    localStorage.setItem('diaries', JSON.stringify(diaries));
+                    // trigger storage event for syncing
+                    localStorage.setItem('diaries_sync_ts', Date.now());
+                    alert('✅ Diary saved!');
+                    this.loadDiariesForDate(this.selectedDiaryDate);
+                });
+                // initial load
+                this.loadDiariesForDate(this.selectedDiaryDate);
+            },
+
+            deleteDiary(id) {
+                if (!confirm('Delete this diary entry?')) return;
+                let diaries = JSON.parse(localStorage.getItem('diaries') || '[]');
+                const entry = diaries.find(d=>d.id===id);
+                const current = localStorage.getItem('currentUserEmail') || 'guest';
+                if (entry && entry.owner !== current && current !== 'admin@example.com') {
+                    return alert('You can only delete your own diary entries.');
+                }
+                diaries = diaries.filter(d => d.id !== id);
+                localStorage.setItem('diaries', JSON.stringify(diaries));
+                localStorage.setItem('diaries_sync_ts', Date.now());
+                this.loadDiariesForDate(this.selectedDiaryDate);
+            },
+
+            // Helper methods for diary calendar
+            formatDate(d) {
+                const dt = new Date(d);
+                return dt.toISOString().slice(0,10);
+            },
+
+            renderCalendar(month, year) {
+                const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                document.getElementById('cal-month').textContent = monthNames[month];
+                document.getElementById('cal-year').textContent = year;
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month+1, 0).getDate();
+                let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;font-weight:600;color:#666;"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>';
+                html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">';
+                for (let i=0;i<firstDay;i++) html += '<div></div>';
+                for (let d=1; d<=daysInMonth; d++) {
+                    const dateStr = this.formatDate(new Date(year, month, d));
+                    const diaries = JSON.parse(localStorage.getItem('diaries') || '[]');
+                    const hasPublic = diaries.some(en=>en.date===dateStr && en.public);
+                    const hasOwn = diaries.some(en=>en.date===dateStr && en.owner === (localStorage.getItem('currentUserEmail')||'guest'));
+                    html += `<div class="cal-day" data-date="${dateStr}" style="padding:8px;border-radius:6px;cursor:pointer;background:${dateStr===this.selectedDiaryDate? '#ffeef4':'transparent'};border:1px solid #f6e6ec;position:relative;">${d}${hasPublic?'<span style="position:absolute;right:6px;top:6px;font-size:12px;color:#ff6b9d;">🌐</span>':''}${hasOwn?'<span style="position:absolute;left:6px;top:6px;font-size:12px;color:#4ecdc4;">●</span>':''}</div>`;
+                }
+                html += '</div>';
+                const cal = document.getElementById('calendar');
+                cal.innerHTML = html;
+                cal.querySelectorAll('.cal-day').forEach(td => td.addEventListener('click', (ev)=>{
+                    const date = ev.currentTarget.dataset.date;
+                    this.selectedDiaryDate = date;
+                    document.getElementById('selected-date-display').textContent = new Date(date).toDateString();
+                    // highlight
+                    cal.querySelectorAll('.cal-day').forEach(n=>n.style.background='transparent');
+                    ev.currentTarget.style.background = '#ffeef4';
+                    this.loadDiariesForDate(date);
+                }));
+                // set default selected date display
+                document.getElementById('selected-date-display').textContent = new Date(this.selectedDiaryDate).toDateString();
+            },
+
+            loadDiariesForDate(dateStr) {
+                const diaries = JSON.parse(localStorage.getItem('diaries') || '[]');
+                const current = localStorage.getItem('currentUserEmail') || 'guest';
+                const entries = diaries.filter(d=>d.date===dateStr).sort((a,b)=>b.id-a.id);
+                let html = '';
+                if (entries.length===0) html = '<p style="color:#888;">No entries for this date yet.</p>';
+                else {
+                    entries.forEach(en => {
+                        if (!en.public && en.owner !== current && current !== 'admin@example.com') return; // skip private
+                        html += `<div class="card" style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><h4 style="margin:0;color:var(--primary);">${en.title||'Untitled'}</h4><small style="color:#888;">by ${en.owner} ${en.mood? '· '+en.mood : ''}</small></div>`;
+                        if (en.owner === current || current === 'admin@example.com') html += `<div><button class="btn btn-primary" onclick="App.deleteDiary(${en.id})">🗑️</button></div>`;
+                        html += `</div><p style="white-space:pre-wrap;margin-top:10px;color:#555;">${en.content}</p><div style="margin-top:8px;color:#888;font-size:12px;">Tags: ${(en.tags||[]).join(', ')}</div></div>`;
+                    });
+                }
+                document.getElementById('diary-entries').innerHTML = html;
+                // preload form if owner has an entry for that date (prefill with last own)
+                const currentOwn = entries.find(e=>e.owner===current);
+                if (currentOwn) {
+                    document.getElementById('diary-title').value = currentOwn.title || '';
+                    document.getElementById('diary-content').value = currentOwn.content || '';
+                    document.getElementById('diary-public').checked = !!currentOwn.public;
+                    document.getElementById('diary-mood').value = currentOwn.mood || '😊';
+                    document.getElementById('diary-tags').value = (currentOwn.tags||[]).join(', ');
+                } else {
+                    document.getElementById('diary-title').value = '';
+                    document.getElementById('diary-content').value = '';
+                    document.getElementById('diary-public').checked = false;
+                    document.getElementById('diary-mood').value = '😊';
+                    document.getElementById('diary-tags').value = '';
+                }
+            },
+
+            showPublicDiaries() {
+                const diaries = JSON.parse(localStorage.getItem('diaries') || '[]');
+                const publicEntries = diaries.filter(d=>d.public).sort((a,b)=>b.id-a.id);
+                let html = '<h3 style="color:var(--secondary);">🌐 Public Diary Entries</h3>';
+                if (publicEntries.length===0) html += '<p style="color:#888;">No public entries yet.</p>';
+                else publicEntries.forEach(en => {
+                    html += `<div class="card" style="margin-bottom:10px;"><h4 style="margin:0;color:var(--primary);">${en.title||'Untitled'}</h4><small style="color:#888;">${new Date(en.date).toDateString()} · by ${en.owner} ${en.mood? '· '+en.mood : ''}</small><p style="white-space:pre-wrap;margin-top:8px;color:#555;">${en.content}</p></div>`;
+                });
+                document.getElementById('diary-entries').innerHTML = html;
+            },
+
+            getNotesPage() {
+                const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+                const notesHTML = notes.length > 0 ? notes.map(n => `<div class="note-item"><p>${n.text}</p><button onclick="App.deleteNote(${n.id})" class="note-delete">🗑️</button></div>`).join('') : '<p style="color: #888; text-align: center;">No notes yet. Create one!</p>';
+                return `<h2 style="color: var(--primary); margin-bottom: 30px;">📝 Notes</h2><div class="card" style="margin-bottom: 30px;"><h3 style="color: var(--secondary); margin-bottom: 15px;">✨ Add Quick Note</h3><form id="notes-form"><div class="form-group"><label for="note-text">Your Note</label><textarea id="note-text" placeholder="Write something important..." style="min-height: 100px;" required></textarea></div><button type="submit" class="btn btn-primary">📌 Save Note</button></form></div><h3 style="color: var(--secondary); margin-bottom: 20px;">Your Notes</h3><div class="notes-grid">${notesHTML}</div>`;
+            },
+
+            setupNotesListeners() {
+                document.getElementById('notes-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const text = document.getElementById('note-text').value;
+                    if (text.trim()) {
+                        const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+                        notes.push({ id: Date.now(), text });
+                        localStorage.setItem('notes', JSON.stringify(notes));
+                        alert('✅ Note saved!');
+                        this.goToPage('notes');
+                    }
+                });
+            },
+
+            deleteNote(id) {
+                if (confirm('Delete this note?')) {
+                    let notes = JSON.parse(localStorage.getItem('notes') || '[]');
+                    localStorage.setItem('notes', JSON.stringify(notes.filter(n => n.id !== id)));
+                    this.goToPage('notes');
+                }
+            },
+
+            getGalleryPage() {
+                const images = JSON.parse(localStorage.getItem('gallery') || '[]');
+                const galleryHTML = images.length > 0 ? images.map(img => `<div class="gallery-item"><img src="${img.data}" alt="Gallery"><button onclick="App.deleteImage(${img.id})" class="gallery-delete">🗑️</button></div>`).join('') : '<p style="color: #888; text-align: center;">No photos yet. Upload one!</p>';
+                return `<h2 style="color: var(--primary); margin-bottom: 30px;">🖼️ Photo Gallery</h2><div class="card" style="margin-bottom: 30px;"><h3 style="color: var(--secondary); margin-bottom: 15px;">📸 Upload Photo</h3><form id="gallery-form"><div class="form-group"><label for="gallery-image">Select Image</label><input type="file" id="gallery-image" accept="image/*" required></div><button type="submit" class="btn btn-primary">📤 Upload Photo</button></form></div><h3 style="color: var(--secondary); margin-bottom: 20px;">Your Gallery</h3><div class="gallery-grid">${galleryHTML}</div>`;
+            },
+
+            setupGalleryListeners() {
+                document.getElementById('gallery-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const file = document.getElementById('gallery-image').files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (evt) => {
+                            const images = JSON.parse(localStorage.getItem('gallery') || '[]');
+                            images.push({ id: Date.now(), data: evt.target.result });
+                            localStorage.setItem('gallery', JSON.stringify(images));
+                            alert('✅ Photo uploaded!');
+                            this.goToPage('gallery');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            },
+
+            deleteImage(id) {
+                if (confirm('Delete this photo?')) {
+                    let images = JSON.parse(localStorage.getItem('gallery') || '[]');
+                    localStorage.setItem('gallery', JSON.stringify(images.filter(img => img.id !== id)));
+                    this.goToPage('gallery');
+                }
+            },
+
+            getWishesPage() {
+                const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                const completed = wishes.filter(w => w.isCompleted).length;
+                const pending = wishes.length - completed;
+
+
+                const wishesHTML = wishes.length > 0 ? wishes.map(w => {
+                    // Format date as DD MMM YYYY
+                    let dateStr = '';
+                    if (w.createdAt) {
+                        const d = new Date(w.createdAt);
+                        const day = d.getDate().toString().padStart(2, '0');
+                        const month = d.toLocaleString('default', { month: 'short' });
+                        const year = d.getFullYear();
+                        dateStr = `${day} ${month} ${year}`;
+                    }
+                    return `
+                    <div class="card" style="margin-bottom:14px;padding:14px;background:${w.isCompleted ? 'linear-gradient(135deg,#e8f5e9,#f1f8e9)' : 'linear-gradient(135deg,#fff8fc,#fff)'};border-left:4px solid ${w.isCompleted ? '#4caf50' : '#ff6b9d'};">
+                        <div style="display:flex;gap:12px;align-items:flex-start;">
+                            <!-- Checkbox for completion (always visible) -->
+                            <div style="padding-top:8px;">
+                                <input type="checkbox" ${w.isCompleted ? 'checked' : ''} onchange="App.toggleWishComplete(${w.id})" style="width:20px;height:20px;cursor:pointer;accent-color:var(--primary);">
+                            </div>
+
+                            <!-- Wish content -->
+                            <div style="flex:1;">
+                                <div class="wish-display-${w.id}" style="color:${w.isCompleted ? '#999' : '#555'};line-height:1.6;word-wrap:break-word;cursor:pointer;padding:8px;border-radius:6px;transition:all .2s ease;text-decoration:${w.isCompleted ? 'line-through' : 'none'};" onclick="App.editWish(${w.id})">
+                                    <strong>${w.text}</strong>
+                                </div>
+                                <div class="wish-edit-${w.id}" style="display:none;margin-top:8px;">
+                                    <textarea class="wish-textarea-${w.id}" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;min-height:80px;font-family:inherit;font-size:14px;">${w.text}</textarea>
+                                    <div style="display:flex;gap:8px;margin-top:8px;">
+                                        <button class="btn btn-primary" onclick="App.saveWish(${w.id})" style="padding:8px 12px;font-size:12px;">💾 Save</button>
+                                        <button class="btn" onclick="App.cancelEditWish(${w.id})" style="padding:8px 12px;font-size:12px;">✕ Cancel</button>
+                                    </div>
+                                </div>
+
+                                <!-- Memory photos section -->
+                                <div style="margin-top:12px;padding-top:12px;border-top:1px solid ${w.isCompleted ? '#c8e6c9' : '#fce4ec'};">
+                                    <div style="font-size:12px;color:#666;margin-bottom:8px;display:flex;gap:6px;align-items:center;">
+                                        📸 Memory Photos ${w.photos && w.photos.length > 0 ? `(${w.photos.length})` : ''}
+                                    </div>
+                                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                                        ${w.photos && w.photos.length > 0 ? w.photos.map((photo, idx) => `
+                                            <div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid ${w.isCompleted ? '#4caf50' : '#ff6b9d'};">
+                                                <img src="${photo}" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" onclick="App.viewPhoto('${photo}')" title="Click to view">
+                                                <button onclick="App.removePhoto(${w.id},${idx})" style="position:absolute;top:2px;right:2px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:20px;height:20px;padding:0;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+                                            </div>
+                                        `).join('') : '<span style="color:#999;font-size:12px;">No photos yet</span>'}
+                                    </div>
+                                    <input type="file" id="wish-photo-${w.id}" accept="image/*" style="display:none;" onchange="App.addPhotoToWish(${w.id})">
+                                    <button class="btn" onclick="document.getElementById('wish-photo-${w.id}').click()" style="padding:6px 10px;font-size:12px;">📷 Add Photo</button>
+                                </div>
+                            </div>
+
+                            <!-- Date (always show DD MMM YYYY) -->
+                            <div style="color:#999;font-size:12px;white-space:nowrap;text-align:right;min-width:90px;">
+                                <div>${dateStr}</div>
+                                ${w.isCompleted ? `<div style=\"color:#4caf50;font-weight:600;\">✓ Done</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('') : '<p style="color:#888;text-align:center;">No wishes yet. Add one!</p>';
+
+                return `
+                    <h2 style="color:var(--primary);margin-bottom:30px;">💑 Our Wish List</h2>
+                    <div class="card" style="margin-bottom:30px;background:linear-gradient(135deg,#fff9e6,#fffde7);border-left:4px solid #ffc107;">
+                        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+                            <div style="flex:1;">
+                                <h3 style="color:var(--secondary);margin:0 0 10px 0;">🌟 Add a Wish</h3>
+                                <form id="wishes-form">
+                                    <div class="form-group">
+                                        <label for="wish-text">Your Wish</label>
+                                        <textarea id="wish-text" placeholder="What do you wish for?" style="min-height:80px;resize:vertical;" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">✨ Add Wish</button>
+                                </form>
+                            </div>
+                            <div style="background:#fff;padding:16px;border-radius:10px;text-align:center;min-width:150px;box-shadow:0 4px 12px rgba(255,107,157,0.1);">
+                                <div style="font-size:28px;font-weight:700;color:var(--primary);">${wishes.length}</div>
+                                <div style="color:#666;font-size:12px;">Total Wishes</div>
+                                <div style="margin-top:12px;padding-top:12px;border-top:1px solid #eee;">
+                                    <div style="color:#4caf50;font-weight:600;font-size:16px;">${completed}</div>
+                                    <div style="color:#666;font-size:11px;">Completed 🎉</div>
+                                </div>
+                                <div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;">
+                                    <div style="color:#ff6b9d;font-weight:600;font-size:16px;">${pending}</div>
+                                    <div style="color:#666;font-size:11px;">Still Pending...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 style="color:var(--secondary);margin-bottom:20px;">✨ Our Wishes</h3>
+                    <p style="color:#999;font-size:13px;margin-bottom:12px;">✓ Mark wishes as complete • 📷 Add memory photos • Click to edit</p>
+                    ${wishesHTML}
+                `;
+            },
+
+            setupWishesListeners() {
+                document.getElementById('wishes-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const text = document.getElementById('wish-text').value.trim();
+                    if (text) {
+                        const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                        wishes.push({ 
+                            id: Date.now(), 
+                            text, 
+                            createdAt: new Date().toISOString(),
+                            isCompleted: false,
+                            photos: []
+                        });
+                        localStorage.setItem('wishes', JSON.stringify(wishes));
+                        alert('✅ Wish added!');
+                        document.getElementById('wish-text').value = '';
+                        this.goToPage('wishes');
+                    }
+                });
+            },
+
+            editWish(id) {
+                document.querySelector(`.wish-display-${id}`).style.display = 'none';
+                document.querySelector(`.wish-edit-${id}`).style.display = 'block';
+                document.querySelector(`.wish-textarea-${id}`).focus();
+            },
+
+            saveWish(id) {
+                const newText = document.querySelector(`.wish-textarea-${id}`).value.trim();
+                if (!newText) {
+                    alert('Wish cannot be empty');
+                    return;
+                }
+                const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                const idx = wishes.findIndex(w => w.id === id);
+                if (idx !== -1) {
+                    wishes[idx].text = newText;
+                    wishes[idx].editedAt = new Date().toISOString();
+                    localStorage.setItem('wishes', JSON.stringify(wishes));
+                    alert('✅ Wish updated!');
+                    this.goToPage('wishes');
+                }
+            },
+
+            cancelEditWish(id) {
+                document.querySelector(`.wish-display-${id}`).style.display = 'block';
+                document.querySelector(`.wish-edit-${id}`).style.display = 'none';
+            },
+
+            toggleWishComplete(id) {
+                const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                const idx = wishes.findIndex(w => w.id === id);
+                if (idx !== -1) {
+                    wishes[idx].isCompleted = !wishes[idx].isCompleted;
+                    wishes[idx].completedAt = wishes[idx].isCompleted ? new Date().toISOString() : null;
+                    localStorage.setItem('wishes', JSON.stringify(wishes));
+                    if (wishes[idx].isCompleted) {
+                        this.triggerConfetti();
+                        alert('🎉 Wish completed! What an amazing achievement!');
+                    }
+                    this.goToPage('wishes');
+                }
+            },
+
+            addPhotoToWish(id) {
+                const fileInput = document.getElementById(`wish-photo-${id}`);
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                        const idx = wishes.findIndex(w => w.id === id);
+                        if (idx !== -1) {
+                            if (!wishes[idx].photos) wishes[idx].photos = [];
+                            wishes[idx].photos.push(e.target.result);
+                            localStorage.setItem('wishes', JSON.stringify(wishes));
+                            this.goToPage('wishes');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                    fileInput.value = '';
+                }
+            },
+
+            removePhoto(id, photoIdx) {
+                if (confirm('Remove this photo?')) {
+                    const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+                    const idx = wishes.findIndex(w => w.id === id);
+                    if (idx !== -1 && wishes[idx].photos) {
+                        wishes[idx].photos.splice(photoIdx, 1);
+                        localStorage.setItem('wishes', JSON.stringify(wishes));
+                        this.goToPage('wishes');
+                    }
+                }
+            },
+
+            viewPhoto(photoDataUrl) {
+                const modal = document.createElement('div');
+                modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:2000;';
+                modal.innerHTML = `
+                    <div style="position:relative;max-width:90vw;max-height:90vh;">
+                        <img src="${photoDataUrl}" style="width:100%;height:100%;object-fit:contain;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="position:absolute;top:10px;right:10px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;">✕</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+            },
+
+                        getDrawPage() {
+                                return `
+                                    <h2 style="color: var(--primary); margin-bottom: 18px;">✏️ Drawing Canvas</h2>
+                                    <div class="card" style="margin-bottom:16px;padding:12px;">
+                                        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                                            <div style="display:flex;gap:6px;align-items:center;">
+                                                <button class="btn" onclick="App.selectTool('pen')">✏️ Pen</button>
+                                                <button class="btn" onclick="App.selectTool('line')">📏 Line</button>
+                                                <button class="btn" onclick="App.selectTool('rect')">▭ Rect</button>
+                                                <button class="btn" onclick="App.selectTool('circle')">◯ Circle</button>
+                                            </div>
+                                            <div style="display:flex;gap:6px;align-items:center;">
+                                                Colors:
+                                                <button class="btn" onclick="App.setDrawColor('#000000')" style="background:#000;color:#fff"> </button>
+                                                <button class="btn" onclick="App.setDrawColor('#ff6b9d')" style="background:#ff6b9d"> </button>
+                                                <button class="btn" onclick="App.setDrawColor('#ffc3a0')" style="background:#ffc3a0"> </button>
+                                                <button class="btn" onclick="App.setDrawColor('#4ecdc4')" style="background:#4ecdc4"> </button>
+                                                <button class="btn" onclick="App.setDrawColor('#6c5ce7')" style="background:#6c5ce7"> </button>
+                                                <input type="color" id="custom-color" value="#000000" style="width:36px;height:36px;border:none;padding:0;" onchange="App.setDrawColor(this.value)">
+                                            </div>
+                                            <div style="display:flex;gap:6px;align-items:center;">
+                                                Brush: <input id="brush-size" type="range" min="1" max="30" value="3" onchange="App.setBrushSize(this.value)">
+                                            </div>
+                                            <div style="display:flex;gap:6px;margin-left:auto;">
+                                                <button class="btn" onclick="App.undoDraw()">↶ Undo</button>
+                                                <button class="btn" onclick="App.clearDrawing()">🗑️ Clear</button>
+                                                <button class="btn btn-primary" onclick="App.saveDrawing()">💾 Save</button>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+                                            <div style="display:flex;gap:6px;align-items:center;">Collaborative:</div>
+                                            <button class="btn" id="start-session">Start Session (offer)</button>
+                                            <button class="btn" id="join-session">Join Session (paste offer)</button>
+                                            <button class="btn" id="close-session">Close Session</button>
+                                        </div>
+                                        <div style="display:flex;gap:8px;margin-bottom:10px;"><textarea id="webrtc-offer" placeholder="Offer / Answer" style="flex:1;min-height:60px;padding:8px;border-radius:6px;border:1px solid #eee;"></textarea></div>
+                                        <canvas id="drawing-canvas" width="900" height="500" style="border: 3px solid var(--primary); border-radius: 8px; background: white; cursor: crosshair; display: block; margin: 0 auto; max-width: 100%; height: auto;"></canvas>
+                                    </div>
+                                `;
+                        },
+
+
+            setupDrawing() {
+                const canvas = document.getElementById('drawing-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                this.drawActions = [];
+                this.redoActions = [];
+                this.currentTool = 'pen';
+                this.currentBrush = 3;
+                this.currentDrawColor = '#000000';
+                canvas.width = Math.min(canvas.parentElement.clientWidth - 50, 900);
+
+                let isDrawing = false;
+                let startX = 0, startY = 0;
+
+                const sendAction = (action) => {
+                    // store locally
+                    this.drawActions.push(action);
+                    // send via dataChannel if exists
+                    if (this.drawChannel && this.drawChannel.readyState === 'open') {
+                        this.drawChannel.send(JSON.stringify({type:'draw', action}));
+                    }
+                };
+
+                canvas.addEventListener('pointerdown', (e) => {
+                    isDrawing = true;
+                    const rect = canvas.getBoundingClientRect();
+                    startX = e.clientX - rect.left;
+                    startY = e.clientY - rect.top;
+                    if (this.currentTool === 'pen') {
+                        sendAction({ tool:'pen', color:this.currentDrawColor, size:this.currentBrush, points:[{x:startX,y:startY}] });
+                    }
+                });
+
+                canvas.addEventListener('pointermove', (e) => {
+                    if (!isDrawing) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    if (this.currentTool === 'pen') {
+                        const action = this.drawActions[this.drawActions.length-1];
+                        action.points.push({x,y});
+                        this.drawStroke(action);
+                        if (this.drawChannel && this.drawChannel.readyState === 'open') {
+                            this.drawChannel.send(JSON.stringify({type:'draw_partial', point:{x,y}}));
+                        }
+                    } else {
+                        // preview by redrawing
+                        this.redrawAll();
+                        ctx.strokeStyle = this.currentDrawColor;
+                        ctx.lineWidth = this.currentBrush;
+                        ctx.beginPath();
+                        if (this.currentTool === 'line') {
+                            ctx.moveTo(startX, startY); ctx.lineTo(x,y); ctx.stroke();
+                        } else if (this.currentTool === 'rect') {
+                            ctx.strokeRect(startX, startY, x-startX, y-startY);
+                        } else if (this.currentTool === 'circle') {
+                            const rx = (x-startX); const ry = (y-startY); ctx.beginPath(); ctx.ellipse(startX+rx/2, startY+ry/2, Math.abs(rx/2), Math.abs(ry/2), 0, 0, Math.PI*2); ctx.stroke();
+                        }
+                    }
+                });
+
+                canvas.addEventListener('pointerup', (e) => {
+                    if (!isDrawing) return;
+                    isDrawing = false;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    if (this.currentTool !== 'pen') {
+                        const action = { tool:this.currentTool, color:this.currentDrawColor, size:this.currentBrush, start:{x:startX,y:startY}, end:{x,y} };
+                        this.drawActions.push(action);
+                        if (this.drawChannel && this.drawChannel.readyState === 'open') this.drawChannel.send(JSON.stringify({type:'draw', action}));
+                        this.redrawAll();
+                    }
+                });
+
+                canvas.addEventListener('pointerleave', () => { isDrawing = false; });
+
+                this.drawCanvas = canvas;
+                this.drawCtx = ctx;
+
+                // toolbar handlers
+                window.App.setBrushSize = (v) => { this.currentBrush = Number(v); };
+                window.App.selectTool = (t) => { this.currentTool = t; };
+                window.App.undoDraw = () => { if (this.drawActions.length) { this.drawActions.pop(); localStorage.setItem('draw_sync_ts', Date.now()); this.redrawAll(); } };
+
+                // WebRTC session handlers (manual signaling)
+                document.getElementById('start-session').addEventListener('click', async () => {
+                    await this.startCollabSession(true);
+                });
+                document.getElementById('join-session').addEventListener('click', async () => {
+                    const offer = document.getElementById('webrtc-offer').value.trim();
+                    if (!offer) return alert('Paste the offer SDP to join.');
+                    await this.startCollabSession(false, offer);
+                });
+                document.getElementById('close-session').addEventListener('click', () => {
+                    if (this.pc) { this.pc.close(); this.pc = null; }
+                    if (this.drawChannel) { this.drawChannel.close(); this.drawChannel = null; }
+                    alert('Session closed.');
+                });
+
+                // Listen for sync via storage
+                window.addEventListener('storage', (e)=>{ if (e.key==='draw_sync_ts') { this.redrawAll(); } });
+            },
+
+            setDrawColor(color) { this.currentDrawColor = color; },
+            clearDrawing() { if (this.drawCtx && this.drawCanvas) { this.drawCtx.clearRect(0, 0, this.drawCanvas.width, this.drawCanvas.height); this.drawActions = []; localStorage.setItem('draw_sync_ts', Date.now()); } },
+
+            drawStroke(action) {
+                const ctx = this.drawCtx;
+                if (!ctx) return;
+                ctx.strokeStyle = action.color || '#000';
+                ctx.lineWidth = action.size || 3;
+                ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+                if (action.tool === 'pen') {
+                    ctx.beginPath();
+                    const pts = action.points || [];
+                    if (pts.length>0) { ctx.moveTo(pts[0].x, pts[0].y); for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y); ctx.stroke(); }
+                } else if (action.tool === 'line') {
+                    ctx.beginPath(); ctx.moveTo(action.start.x, action.start.y); ctx.lineTo(action.end.x, action.end.y); ctx.stroke();
+                } else if (action.tool === 'rect') {
+                    ctx.beginPath(); ctx.strokeRect(action.start.x, action.start.y, action.end.x-action.start.x, action.end.y-action.start.y);
+                } else if (action.tool === 'circle') {
+                    const rx = (action.end.x-action.start.x); const ry = (action.end.y-action.start.y); ctx.beginPath(); ctx.ellipse(action.start.x+rx/2, action.start.y+ry/2, Math.abs(rx/2), Math.abs(ry/2), 0, 0, Math.PI*2); ctx.stroke();
+                }
+            },
+
+            redrawAll() {
+                if (!this.drawCtx || !this.drawCanvas) return;
+                const ctx = this.drawCtx;
+                ctx.clearRect(0,0,this.drawCanvas.width, this.drawCanvas.height);
+                const actions = this.drawActions || [];
+                actions.forEach(a => this.drawStroke(a));
+            },
+
+            saveDrawing() {
+                if (this.drawCanvas) {
+                    this.redrawAll();
+                    const imageData = this.drawCanvas.toDataURL('image/png');
+                    const images = JSON.parse(localStorage.getItem('gallery') || '[]');
+                    images.push({ id: Date.now(), data: imageData });
+                    localStorage.setItem('gallery', JSON.stringify(images));
+                    localStorage.setItem('gallery_sync_ts', Date.now());
+                    alert('✅ Drawing saved to gallery!');
+                }
+            },
+
+            // Collaborative WebRTC (manual signaling)
+            async startCollabSession(initiator, remoteOffer) {
+                try {
+                    const pc = new RTCPeerConnection();
+                    this.pc = pc;
+                    pc.onicecandidate = (ev) => {
+                        if (ev.candidate) return; // wait for gathering complete
+                    };
+                    if (initiator) {
+                        const channel = pc.createDataChannel('draw');
+                        this.setupDrawChannel(channel);
+                        const offer = await pc.createOffer();
+                        await pc.setLocalDescription(offer);
+                        // wait for ICE gather (simple approach)
+                        setTimeout(()=>{
+                            document.getElementById('webrtc-offer').value = JSON.stringify(pc.localDescription);
+                            alert('Offer created. Share this text with your collaborator and paste their answer into the same box.');
+                        }, 800);
+                    } else {
+                        pc.ondatachannel = (ev) => { this.setupDrawChannel(ev.channel); };
+                        const desc = JSON.parse(remoteOffer);
+                        await pc.setRemoteDescription(desc);
+                        const answer = await pc.createAnswer();
+                        await pc.setLocalDescription(answer);
+                        setTimeout(()=>{
+                            document.getElementById('webrtc-offer').value = JSON.stringify(pc.localDescription);
+                            alert('Answer created. Paste this back to the initiator.');
+                        }, 800);
+                    }
+                } catch (err) { console.error(err); alert('Error setting up session: '+err.message); }
+            },
+
+            setupDrawChannel(channel) {
+                this.drawChannel = channel;
+                channel.onopen = () => { alert('Collaborative channel open!'); };
+                channel.onmessage = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.data);
+                        if (data.type === 'draw') { this.drawActions.push(data.action); this.drawStroke(data.action); }
+                        else if (data.type === 'draw_partial') {
+                            const last = this.drawActions[this.drawActions.length-1]; if (last && last.tool==='pen') { last.points.push(data.point); this.drawStroke(last); }
+                        }
+                    } catch (e) { console.error('draw msg', e); }
+                };
+            },
+
+            getTimeCapsulePage() {
+                // [MIGRATION NOTE] Replace localStorage.getItem('timeCapsules') with GET /api/capsules
+                const capsules = JSON.parse(localStorage.getItem('timeCapsules') || '[]');
+                const currentUser = localStorage.getItem('currentUserEmail') || 'guest';
+                const now = new Date();
+                
+                const locked = capsules.filter(c => c.authorId === currentUser && new Date(c.unlockAt) > now);
+                const unlocked = capsules.filter(c => c.authorId === currentUser && new Date(c.unlockAt) <= now);
+                
+                let lockedHTML = locked.length > 0 
+                  ? locked.map(c => {
+                      const daysLeft = Math.ceil((new Date(c.unlockAt) - now) / (1000*60*60*24));
+                      const hoursLeft = Math.ceil((new Date(c.unlockAt) - now) / (1000*60*60));
+                      const timeString = daysLeft > 0 ? `${daysLeft} day${daysLeft !== 1 ? 's' : ''}` : `${hoursLeft} hour${hoursLeft !== 1 ? 's' : ''}`;
+                      return `<div class="card capsule-locked" style="margin-bottom:15px;background:#fff8f0;border-left:4px solid var(--primary);transition:all 0.3s ease;animation:slideInLeft 0.5s ease;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                          <div style="flex:1;">
+                            <strong style="color:var(--primary);font-size:15px;">🔒 ${c.title || 'Untitled Capsule'}</strong>
+                            <p style="color:#888;margin:8px 0;font-size:12px;">Unlocks in <strong>${timeString}</strong> • ${new Date(c.unlockAt).toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'})}</p>
+                          </div>
+                          <button class="btn" onclick="App.deleteCapsule('${c.id}')" style="background:#f0f0f0;color:#d32f2f;padding:8px 12px;">🗑️</button>
+                        </div>
+                      </div>`;
+                    }).join('')
+                  : '<p style="color:#999;text-align:center;padding:20px;">📭 No locked capsules yet.</p>';
+                
+                let unlockedHTML = unlocked.length > 0 
+                  ? unlocked.map(c => `<div class="card capsule-unlocked" style="margin-bottom:15px;background:#f0fff0;border-left:4px solid #4caf50;cursor:pointer;transition:all 0.3s ease;animation:slideInRight 0.5s ease;hover-effect:true;" onmouseover="this.style.transform='translateX(5px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.transform='translateX(0)';this.style.boxShadow='none'" onclick="App.showCapsuleContent('${c.id}')">
+                    <strong style="color:#4caf50;font-size:15px;">🔓 ${c.title || 'Untitled Capsule'}</strong> <span style="color:#888;font-size:11px;">(${new Date(c.createdAt).toLocaleDateString()})</span>
+                    <p style="color:#666;font-size:12px;margin-top:8px;">✨ Click to reveal your message &rarr;</p>
+                  </div>`).join('')
+                  : '<p style="color:#999;text-align:center;padding:20px;">📭 No unlocked capsules yet.</p>';
+                
+                return `
+                  <h2 style="color:var(--primary);margin-bottom:10px;animation:fadeIn 0.6s ease;">⏰ Time Capsule</h2>
+                  <p style="color:#666;margin-bottom:25px;font-size:14px;">Store heartfelt messages and unlock them on special dates. Create memories that travel through time. 💕</p>
+                  
+                  <div class="card" style="margin-bottom:30px;background:linear-gradient(135deg,#fff9e6 0%,#ffe0b2 100%);animation:slideUp 0.6s ease;">
+                    <h3 style="color:var(--secondary);margin-bottom:15px;">✍️ Create New Capsule</h3>
+                    <form id="capsule-form">
+                      <div class="form-group">
+                        <label for="capsule-title">Title <span style="color:#888;font-size:12px;">(optional)</span></label>
+                        <input type="text" id="capsule-title" placeholder="e.g., Our Anniversary Message, Letter to Future Me..." maxlength="100">
+                      </div>
+                      <div class="form-group">
+                        <label for="capsule-content">Message</label>
+                        <textarea id="capsule-content" placeholder="Write your heartfelt message here..." required style="min-height:140px;resize:vertical;"></textarea>
+                        <small style="color:#999;display:block;margin-top:5px;"><span id="char-count">0</span>/2000 characters</small>
+                      </div>
+                      <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                        <div>
+                          <label for="capsule-unlock">Unlock Date</label>
+                          <input type="date" id="capsule-unlock" required>
+                        </div>
+                        <div>
+                          <label for="capsule-unlock-time">Time (optional)</label>
+                          <input type="time" id="capsule-unlock-time">
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;font-size:16px;">💾 Create Capsule</button>
+                    </form>
+                  </div>
+                  
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                    <div style="animation:slideInLeft 0.5s ease 0.1s both;">
+                      <h3 style="color:var(--primary);margin-bottom:15px;display:flex;align-items:center;gap:8px;">
+                        🔒 Locked <span style="background:var(--primary);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;">${locked.length}</span>
+                      </h3>
+                      ${lockedHTML}
+                    </div>
+                    <div style="animation:slideInRight 0.5s ease 0.1s both;">
+                      <h3 style="color:#4caf50;margin-bottom:15px;display:flex;align-items:center;gap:8px;">
+                        🔓 Unlocked <span style="background:#4caf50;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;">${unlocked.length}</span>
+                      </h3>
+                      ${unlockedHTML}
+                    </div>
+                  </div>
+                `;
+            },
+
+            setupCapsuleListeners() {
+                const form = document.getElementById('capsule-form');
+                if (!form) return;
+                
+                // Character counter
+                const contentField = document.getElementById('capsule-content');
+                if (contentField) {
+                    contentField.addEventListener('input', (e) => {
+                        const count = document.getElementById('char-count');
+                        if (count) count.textContent = e.target.value.length;
+                        if (e.target.value.length > 2000) {
+                            e.target.value = e.target.value.substring(0, 2000);
+                        }
+                    });
+                }
+                
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const title = document.getElementById('capsule-title').value.trim();
+                    const content = document.getElementById('capsule-content').value.trim();
+                    const unlockDate = document.getElementById('capsule-unlock').value;
+                    const unlockTime = document.getElementById('capsule-unlock-time').value || '00:00';
+                    
+                    // Validation
+                    if (!content) return alert('⚠️ Please write a message.');
+                    if (!unlockDate) return alert('⚠️ Please select an unlock date.');
+                    if (content.length < 5) return alert('⚠️ Message must be at least 5 characters.');
+                    
+                    // Parse unlock datetime
+                    const [h, m] = unlockTime.split(':');
+                    const unlockAt = new Date(`${unlockDate}T${unlockTime}:00`);
+                    
+                    if (unlockAt <= new Date()) {
+                        return alert('⚠️ Unlock date/time must be in the future.');
+                    }
+                    
+                    // [MIGRATION NOTE] Replace this section with:
+                    // const token = localStorage.getItem('authToken');
+                    // const response = await fetch('/api/capsules', {
+                    //   method: 'POST',
+                    //   headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    //   body: JSON.stringify({ title, content, unlockAt, recipientId: null })
+                    // });
+                    
+                    const capsules = JSON.parse(localStorage.getItem('timeCapsules') || '[]');
+                    const capsule = {
+                        id: Date.now().toString(),
+                        authorId: localStorage.getItem('currentUserEmail') || 'guest',
+                        title: title || '💌 Untitled Capsule',
+                        content,
+                        createdAt: new Date().toISOString(),
+                        unlockAt: unlockAt.toISOString(),
+                        isOpened: false,
+                        recipientId: null
+                    };
+                    
+                    capsules.push(capsule);
+                    localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+                    localStorage.setItem('capsule_sync_ts', Date.now());
+                    
+                    // Success feedback
+                    const daysUntil = Math.ceil((unlockAt - new Date()) / (1000*60*60*24));
+                    alert(`✅ Capsule locked!\n\n💌 "${capsule.title}"\n🔐 Unlocks in ${daysUntil} day${daysUntil !== 1 ? 's' : ''}`);
+                    form.reset();
+                    if (document.getElementById('char-count')) document.getElementById('char-count').textContent = '0';
+                    this.goToPage('capsule');
+                });
+                
+                // Set min date to today
+                const today = new Date().toISOString().split('T')[0];
+                const unlockField = document.getElementById('capsule-unlock');
+                if (unlockField) {
+                    unlockField.min = today;
+                    // Pre-fill with tomorrow
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    unlockField.value = tomorrow.toISOString().split('T')[0];
+                }
+            },
+
+            deleteCapsule(id) {
+                if (!confirm('Delete this capsule?')) return;
+                let capsules = JSON.parse(localStorage.getItem('timeCapsules') || '[]');
+                capsules = capsules.filter(c => c.id !== id);
+                localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+                this.goToPage('capsule');
+            },
+
+            showCapsuleContent(id) {
+                const capsules = JSON.parse(localStorage.getItem('timeCapsules') || '[]');
+                const capsule = capsules.find(c => c.id === id);
+                if (!capsule) return alert('💔 Capsule not found.');
+                
+                // Mark as opened (for backend migration)
+                // [MIGRATION NOTE] Replace with: PATCH /api/capsules/:id with { isOpened: true }
+                const idx = capsules.findIndex(c => c.id === id);
+                if (idx !== -1 && !capsules[idx].isOpened) {
+                    capsules[idx].isOpened = true;
+                    capsules[idx].openedAt = new Date().toISOString();
+                    localStorage.setItem('timeCapsules', JSON.stringify(capsules));
+                }
+                
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                  position:fixed;top:0;left:0;width:100%;height:100%;
+                  background:rgba(0,0,0,0.85);display:flex;align-items:center;
+                  justify-content:center;z-index:2000;animation:fadeIn 0.4s ease;backdrop-filter:blur(4px);
+                `;
+                
+                const formattedDate = new Date(capsule.unlockAt).toLocaleDateString('en-US', {
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric'
+                });
+                
+                modal.innerHTML = `
+                  <div style="background:white;border-radius:16px;padding:40px;max-width:550px;
+                    width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4);
+                    animation:slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);border:2px solid var(--primary);">
+                    
+                    <div style="text-align:center;margin-bottom:20px;">
+                      <div style="font-size:48px;margin-bottom:10px;animation:bounce 0.6s ease;">🔓</div>
+                      <h2 style="color:var(--primary);margin:0;font-size:24px;">${capsule.title}</h2>
+                      <p style="color:#888;margin:10px 0 0 0;font-size:12px;">Unlocked on ${formattedDate}</p>
+                    </div>
+                    
+                    <div style="background:linear-gradient(135deg,#f9f9f9,#fafafa);padding:25px;border-radius:12px;border-left:5px solid var(--primary);
+                      margin:25px 0;line-height:1.8;color:#333;font-size:15px;white-space:pre-wrap;word-wrap:break-word;
+                      animation:slideIn 0.6s ease 0.1s both;">
+                      ${capsule.content.replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    <div style="display:flex;gap:10px;margin-bottom:15px;">
+                      <button class="btn btn-primary" onclick="navigator.clipboard.writeText(\`${capsule.content.replace(/`/g, '\\`')}\`).then(()=>alert('✅ Copied to clipboard!')).catch(()=>alert('❌ Copy failed'))" style="flex:1;">📋 Copy Message</button>
+                      <button class="btn" onclick="this.closest('div').parentElement.remove()" style="flex:1;background:#f0f0f0;color:#333;">✕ Close</button>
+                    </div>
+                    
+                    <p style="color:#999;font-size:11px;text-align:center;margin:0;">
+                      Created: ${new Date(capsule.createdAt).toLocaleDateString()} • ID: ${capsule.id}
+                    </p>
+                  </div>
+                `;
+                
+                document.body.appendChild(modal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
+            },
+
+            getVoicePage() {
+                // Voice message archive page
+                return `
+                  <h2 style="color:var(--primary);margin-bottom:10px;">🎤 Voice Memos</h2>
+                  <p style="color:#666;margin-bottom:15px;">Record short voice memos and save them. When logged in the memo will upload to the server; otherwise it will be stored locally (limited).</p>
+
+                  <div class="card" style="margin-bottom:20px;">
+                    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                      <button id="voice-record-btn" class="btn btn-primary">🔴 Start Recording</button>
+                      <button id="voice-stop-btn" class="btn" style="display:none;">⏹️ Stop</button>
+                      <div id="voice-timer" style="color:#666;font-size:14px;">00:00</div>
+                      <label style="margin-left:auto;color:#888;font-size:13px;">Privacy: <select id="voice-isPublic"><option value="false">Private</option><option value="true">Public</option></select></label>
+                    </div>
+                    <div style="margin-top:12px;">
+                      <canvas id="voice-waveform" width="600" height="80" style="width:100%;background:#fff;border-radius:8px;border:1px solid #eee;display:block;"></canvas>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <h3 style="margin-top:0;color:var(--secondary);">Your Voice Memos</h3>
+                    <div id="voice-list" style="min-height:80px;color:#666;"></div>
+                  </div>
+                `;
+            },
+
+            async setupVoiceListeners() {
+                // Wire UI events for voice page
+                const recordBtn = document.getElementById('voice-record-btn');
+                const stopBtn = document.getElementById('voice-stop-btn');
+                const timerEl = document.getElementById('voice-timer');
+                const canvas = document.getElementById('voice-waveform');
+                const isPublicSel = document.getElementById('voice-isPublic');
+
+                if (!recordBtn || !canvas) return;
+
+                let mediaStream = null;
+                let recorder = null;
+                let chunks = [];
+                let startTs = 0;
+
+                // Waveform setup
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const canvasCtx = canvas.getContext('2d');
+                let analyser = null;
+                let sourceNode = null;
+                let rafId = null;
+
+                function drawWave() {
+                    if (!analyser) return;
+                    const bufferLength = analyser.fftSize;
+                    const dataArray = new Uint8Array(bufferLength);
+                    analyser.getByteTimeDomainData(dataArray);
+                    canvasCtx.fillStyle = '#fff';
+                    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+                    canvasCtx.lineWidth = 2;
+                    canvasCtx.strokeStyle = 'rgb(200,0,80)';
+                    canvasCtx.beginPath();
+                    const sliceWidth = canvas.width * 1.0 / bufferLength;
+                    let x = 0;
+                    for (let i = 0; i < bufferLength; i++) {
+                        const v = dataArray[i] / 128.0;
+                        const y = v * canvas.height / 2;
+                        if (i === 0) canvasCtx.moveTo(x, y);
+                        else canvasCtx.lineTo(x, y);
+                        x += sliceWidth;
+                    }
+                    canvasCtx.lineTo(canvas.width, canvas.height/2);
+                    canvasCtx.stroke();
+                    rafId = requestAnimationFrame(drawWave);
+                }
+
+                function updateTimer() {
+                    const elapsed = Math.floor((Date.now() - startTs) / 1000);
+                    const mm = String(Math.floor(elapsed / 60)).padStart(2,'0');
+                    const ss = String(elapsed % 60).padStart(2,'0');
+                    timerEl.textContent = `${mm}:${ss}`;
+                }
+
+                recordBtn.addEventListener('click', async () => {
+                    try {
+                        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        recorder = new MediaRecorder(mediaStream);
+                        chunks = [];
+                        recorder.ondataavailable = e => chunks.push(e.data);
+                        recorder.onstop = async () => {
+                            // Stop analyser and nodes
+                            if (rafId) cancelAnimationFrame(rafId);
+                            if (sourceNode) sourceNode.disconnect();
+                            if (analyser) analyser.disconnect();
+
+                            const blob = new Blob(chunks, { type: 'audio/webm' });
+                            const lengthSec = Math.round(blob.size / 16000); // rough estimate
+                            const isPublic = (isPublicSel && isPublicSel.value === 'true');
+                            // If user is authenticated, upload to backend; else save locally
+                            const token = localStorage.getItem('authToken');
+                            if (token) {
+                                await App.uploadVoice(blob, { lengthSeconds: lengthSec, isPublic });
+                            } else {
+                                // Fallback: store as dataURL in localStorage (note: size limits apply)
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                    const dataUrl = reader.result;
+                                    const voices = JSON.parse(localStorage.getItem('voiceMemos') || '[]');
+                                    const v = {
+                                        id: Date.now().toString(),
+                                        authorId: localStorage.getItem('currentUserEmail') || 'guest',
+                                        dataUrl,
+                                        lengthSeconds: lengthSec,
+                                        createdAt: new Date().toISOString()
+                                    };
+                                    voices.unshift(v);
+                                    try { localStorage.setItem('voiceMemos', JSON.stringify(voices)); }
+                                    catch(e) { alert('Local storage full - cannot save memo locally.'); }
+                                    App.goToPage('voice');
+                                };
+                                reader.readAsDataURL(blob);
+                            }
+                            // stop tracks
+                            mediaStream.getTracks().forEach(t => t.stop());
+                        };
+
+                        // Setup analyser
+                        analyser = audioCtx.createAnalyser();
+                        analyser.fftSize = 2048;
+                        sourceNode = audioCtx.createMediaStreamSource(mediaStream);
+                        sourceNode.connect(analyser);
+
+                        recorder.start();
+                        startTs = Date.now();
+                        recordBtn.style.display = 'none';
+                        stopBtn.style.display = 'inline-block';
+                        updateTimer();
+                        const timerInterval = setInterval(updateTimer, 500);
+
+                        // Start waveform drawing
+                        drawWave();
+
+                        stopBtn.onclick = () => {
+                            if (recorder && recorder.state !== 'inactive') recorder.stop();
+                            clearInterval(timerInterval);
+                            timerEl.textContent = '00:00';
+                            recordBtn.style.display = 'inline-block';
+                            stopBtn.style.display = 'none';
+                        };
+                    } catch (err) {
+                        console.error('Microphone error', err);
+                        alert('Could not access microphone. Please allow microphone access.');
+                    }
+                });
+
+                // Initial render of list
+                this.fetchVoiceList();
+            },
+
+            async fetchVoiceList() {
+                const listEl = document.getElementById('voice-list');
+                if (!listEl) return;
+                listEl.innerHTML = '<p style="color:#999">Loading...</p>';
+
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        const res = await fetch('/api/voice', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (!res.ok) throw new Error('Failed to fetch');
+                        const voices = await res.json();
+                        if (!voices || voices.length === 0) listEl.innerHTML = '<p style="color:#999">No voice memos yet.</p>';
+                        else listEl.innerHTML = voices.map(v => `
+                            <div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                              <div style="flex:1;">
+                                <strong>${v.filename || 'Voice Memo'}</strong>
+                                <div style="color:#777;font-size:12px;margin-top:6px;">${new Date(v.createdAt).toLocaleString()} • ${v.lengthSeconds || 0}s</div>
+                              </div>
+                              <audio controls src="${v.url}" style="width:220px"></audio>
+                              <button class="btn" onclick="App.downloadVoice('${v._id}','${v.url}')">⬇️</button>
+                              <button class="btn" onclick="App.deleteVoice('${v._id}')">🗑️</button>
+                            </div>
+                        `).join('');
+                    } catch (err) {
+                        console.error(err);
+                        listEl.innerHTML = '<p style="color:#e55">Failed to load voice memos</p>';
+                    }
+                } else {
+                    // Local storage fallback
+                    const voices = JSON.parse(localStorage.getItem('voiceMemos') || '[]');
+                    if (!voices || voices.length === 0) listEl.innerHTML = '<p style="color:#999">No voice memos yet.</p>';
+                    else listEl.innerHTML = voices.map(v => `
+                        <div class="card" style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                          <div style="flex:1;">
+                            <strong>Local Memo</strong>
+                            <div style="color:#777;font-size:12px;margin-top:6px;">${new Date(v.createdAt).toLocaleString()} • ${v.lengthSeconds || 0}s</div>
+                          </div>
+                          <audio controls src="${v.dataUrl}" style="width:220px"></audio>
+                          <button class="btn" onclick="App.downloadVoiceLocal('${v.id}')">⬇️</button>
+                          <button class="btn" onclick="App.deleteVoiceLocal('${v.id}')">🗑️</button>
+                        </div>
+                    `).join('');
+                }
+            },
+
+            async uploadVoice(blob, meta = {}) {
+                const fd = new FormData();
+                fd.append('audio', blob, `memo-${Date.now()}.webm`);
+                if (meta.lengthSeconds) fd.append('lengthSeconds', meta.lengthSeconds);
+                if (meta.isPublic) fd.append('isPublic', meta.isPublic);
+                const token = localStorage.getItem('authToken');
+                try {
+                    const res = await fetch('/api/voice/upload', {
+                        method: 'POST',
+                        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+                        body: fd
+                    });
+                    if (!res.ok) throw new Error('Upload failed');
+                    const saved = await res.json();
+                    alert('✅ Voice memo uploaded');
+                    // Refresh list
+                    this.fetchVoiceList();
+                } catch (err) {
+                    console.error(err);
+                    alert('❌ Upload failed. Saving locally instead.');
+                    // fallback handled by caller (reader path)
+                }
+            },
+
+            downloadVoice(id, url) {
+                // Simple download by opening url
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `voice-${id}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            },
+
+            downloadVoiceLocal(id) {
+                const voices = JSON.parse(localStorage.getItem('voiceMemos') || '[]');
+                const v = voices.find(x => x.id === id);
+                if (!v) return alert('Memo not found');
+                const a = document.createElement('a');
+                a.href = v.dataUrl;
+                a.download = `voice-local-${id}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            },
+
+            async deleteVoice(id) {
+                if (!confirm('Delete this voice memo?')) return;
+                const token = localStorage.getItem('authToken');
+                if (!token) return alert('You must be logged in to delete server memos.');
+                try {
+                    const res = await fetch(`/api/voice/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('Delete failed');
+                    alert('✅ Deleted');
+                    this.fetchVoiceList();
+                } catch (err) {
+                    console.error(err);
+                    alert('❌ Delete failed');
+                }
+            },
+
+            deleteVoiceLocal(id) {
+                if (!confirm('Delete this local memo?')) return;
+                let voices = JSON.parse(localStorage.getItem('voiceMemos') || '[]');
+                voices = voices.filter(v => v.id !== id);
+                localStorage.setItem('voiceMemos', JSON.stringify(voices));
+                this.fetchVoiceList();
+            },
+            
+            getLettersPage() {
+                return `
+                  <h2 style="color:var(--primary);margin-bottom:10px;">✉️ Letters to Future Us</h2>
+                  <p style="color:#666;margin-bottom:12px;">Write longform letters to open on special days. Edits are versioned so you can track changes.</p>
+
+                  <div class="card" style="margin-bottom:18px;">
+                    <div style="display:flex;gap:12px;align-items:center;">
+                      <button id="letter-new-btn" class="btn btn-primary">✍️ New Letter</button>
+                      <label style="margin-left:auto;color:#888;font-size:13px;">Unlock at: <input id="letter-unlock" type="date" style="margin-left:8px;padding:6px;border-radius:6px;border:1px solid #eee;"></label>
+                    </div>
+                    <div id="letter-editor-wrap" style="margin-top:12px;display:none;">
+                      <div id="letter-editor" contenteditable="true" style="min-height:160px;background:#fff;border-radius:8px;padding:12px;border:1px solid #eee;overflow:auto;line-height:1.6;color:#222;"></div>
+                      <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
+                        <div id="letter-autosave" style="color:#888;font-size:13px;">Autosave: idle</div>
+                        <button id="letter-save-btn" class="btn btn-primary">💾 Save</button>
+                        <button id="letter-cancel-btn" class="btn">✕ Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <h3 style="margin-top:0;color:var(--secondary);">Your Letters</h3>
+                    <div id="letters-list" style="min-height:80px;color:#666;"></div>
+                  </div>
+                `;
+            },
+
+            async setupLettersListeners() {
+                const newBtn = document.getElementById('letter-new-btn');
+                const editorWrap = document.getElementById('letter-editor-wrap');
+                const editor = document.getElementById('letter-editor');
+                const saveBtn = document.getElementById('letter-save-btn');
+                const cancelBtn = document.getElementById('letter-cancel-btn');
+                const autosaveEl = document.getElementById('letter-autosave');
+                const unlockInput = document.getElementById('letter-unlock');
+
+                if (!newBtn) return;
+
+                let autosaveTimer = null;
+                let currentDraftId = null;
+
+                function startAutosave() {
+                    autosaveEl.textContent = 'Autosave: typing...';
+                    if (autosaveTimer) clearTimeout(autosaveTimer);
+                    autosaveTimer = setTimeout(() => {
+                        const draft = { body: editor.innerHTML, editedAt: new Date().toISOString(), unlockAt: unlockInput.value || null };
+                        localStorage.setItem('letter_draft', JSON.stringify(draft));
+                        autosaveEl.textContent = 'Autosave: saved';
+                        setTimeout(()=> autosaveEl.textContent = 'Autosave: idle', 1500);
+                    }, 1000);
+                }
+
+                editor.addEventListener('input', startAutosave);
+
+                newBtn.addEventListener('click', () => {
+                    editorWrap.style.display = 'block';
+                    editor.innerHTML = localStorage.getItem('letter_draft') ? JSON.parse(localStorage.getItem('letter_draft')).body : '';
+                    const d = localStorage.getItem('letter_draft') ? JSON.parse(localStorage.getItem('letter_draft')) : null;
+                    if (d && d.unlockAt) unlockInput.value = d.unlockAt;
+                    editor.focus();
+                });
+
+                cancelBtn.addEventListener('click', () => {
+                    editorWrap.style.display = 'none';
+                });
+
+                saveBtn.addEventListener('click', async () => {
+                    const body = editor.innerHTML.trim();
+                    if (!body) return alert('Please write something before saving.');
+                    const unlockAt = unlockInput.value ? new Date(unlockInput.value).toISOString() : null;
+                    const token = localStorage.getItem('authToken');
+                    if (token) {
+                        try {
+                            const res = await fetch('/api/letters', { method: 'POST', headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ body, unlockAt }) });
+                            if (!res.ok) throw new Error('Save failed');
+                            alert('✅ Letter saved to server');
+                            localStorage.removeItem('letter_draft');
+                            editorWrap.style.display = 'none';
+                            this.fetchLettersList();
+                        } catch (err) {
+                            console.error(err);
+                            alert('❌ Save failed — saved locally as draft.');
+                            localStorage.setItem('letter_draft', JSON.stringify({ body, unlockAt, editedAt: new Date().toISOString() }));
+                        }
+                    } else {
+                        // local fallback: store in localStorage with versions array
+                        const letters = JSON.parse(localStorage.getItem('letters') || '[]');
+                        const id = Date.now().toString();
+                        const letter = { id, body, unlockAt, versions: [], createdAt: new Date().toISOString() };
+                        letters.unshift(letter);
+                        localStorage.setItem('letters', JSON.stringify(letters));
+                        localStorage.removeItem('letter_draft');
+                        editorWrap.style.display = 'none';
+                        this.fetchLettersList();
+                    }
+                });
+
+                // Load existing list
+                this.fetchLettersList();
+            },
+
+            async fetchLettersList() {
+                const listEl = document.getElementById('letters-list');
+                if (!listEl) return;
+                listEl.innerHTML = '<p style="color:#999">Loading...</p>';
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        const res = await fetch('/api/letters', { headers: { 'Authorization': `Bearer ${token}` } });
+                        if (!res.ok) throw new Error('Failed');
+                        const letters = await res.json();
+                        if (!letters || letters.length === 0) listEl.innerHTML = '<p style="color:#999">No letters yet.</p>';
+                        else listEl.innerHTML = letters.map(l => `
+                            <div class="card" style="margin-bottom:12px;">
+                              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+                                <div style="flex:1;"><strong>Letter</strong><div style="color:#777;font-size:12px;">${new Date(l.createdAt).toLocaleString()} • Unlock: ${l.unlockAt? new Date(l.unlockAt).toLocaleDateString() : '—'}</div></div>
+                                <div style="display:flex;gap:8px;">
+                                  <button class="btn" onclick="App.showLetter('${l._id}')">👁️ View</button>
+                                  <button class="btn" onclick="App.editLetter('${l._id}')">✏️ Edit</button>
+                                  <button class="btn" onclick="App.deleteLetter('${l._id}')">🗑️</button>
+                                </div>
+                              </div>
+                            </div>
+                        `).join('');
+                    } catch (err) {
+                        console.error(err);
+                        listEl.innerHTML = '<p style="color:#e55">Failed to load letters</p>';
+                    }
+                } else {
+                    const letters = JSON.parse(localStorage.getItem('letters') || '[]');
+                    if (!letters || letters.length === 0) listEl.innerHTML = '<p style="color:#999">No letters yet.</p>';
+                    else listEl.innerHTML = letters.map(l => `
+                        <div class="card" style="margin-bottom:12px;">
+                          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+                            <div style="flex:1;"><strong>Local Letter</strong><div style="color:#777;font-size:12px;">${new Date(l.createdAt).toLocaleString()} • Unlock: ${l.unlockAt? new Date(l.unlockAt).toLocaleDateString() : '—'}</div></div>
+                            <div style="display:flex;gap:8px;">
+                              <button class="btn" onclick="App.showLetterLocal('${l.id}')">👁️</button>
+                              <button class="btn" onclick="App.editLetterLocal('${l.id}')">✏️</button>
+                              <button class="btn" onclick="App.deleteLetterLocal('${l.id}')">🗑️</button>
+                            </div>
+                          </div>
+                        </div>
+                    `).join('');
+                }
+            },
+
+            // View and edit helpers (server-backed)
+            async showLetter(id) {
+                const token = localStorage.getItem('authToken');
+                if (!token) return alert('Login to view server letters');
+                try {
+                    const res = await fetch(`/api/letters/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('Failed');
+                    const l = await res.json();
+                    const versionsHtml = (l.versions||[]).map(v=>`<div style="border-left:3px solid #eee;padding-left:8px;margin-top:8px;color:#666;font-size:13px;"><div style="font-size:12px;color:#999;">Edited: ${new Date(v.editedAt).toLocaleString()}</div>${v.body}</div>`).join('');
+                    const modal = document.createElement('div');
+                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;';
+                    modal.innerHTML = `
+                      <div style="background:white;padding:20px;border-radius:12px;max-width:800px;width:94%;max-height:80vh;overflow:auto;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;"><h3>Letter</h3><button onclick="this.closest('div').parentElement.parentElement.remove()">Close</button></div>
+                        <div style="background:#fafafa;padding:12px;border-radius:8px;margin-top:8px;">${l.body}</div>
+                        <h4 style="margin-top:14px;color:#666;">Version history</h4>
+                        ${versionsHtml || '<div style="color:#888">No previous versions</div>'}
+                      </div>
+                    `;
+                    document.body.appendChild(modal);
+                    modal.addEventListener('click', (e)=>{ if (e.target === modal) modal.remove(); });
+                } catch (err) {
+                    console.error(err);
+                    alert('Failed to load letter');
+                }
+            },
+
+            async editLetter(id) {
+                // Fetch and populate editor, then on save append version via PATCH /:id/version
+                const token = localStorage.getItem('authToken');
+                if (!token) return alert('Login to edit server letters');
+                try {
+                    const res = await fetch(`/api/letters/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('Failed');
+                    const l = await res.json();
+                    // reuse editor UI
+                    document.getElementById('letter-editor-wrap').style.display = 'block';
+                    document.getElementById('letter-editor').innerHTML = l.body;
+                    document.getElementById('letter-unlock').value = l.unlockAt ? new Date(l.unlockAt).toISOString().slice(0,10) : '';
+                    // Override save button flow temporarily
+                    const saveBtn = document.getElementById('letter-save-btn');
+                    const origHandler = saveBtn.onclick;
+                    saveBtn.onclick = async () => {
+                        const newBody = document.getElementById('letter-editor').innerHTML;
+                        try {
+                            const pr = await fetch(`/api/letters/${id}/version`, { method: 'PATCH', headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ body: newBody }) });
+                            if (!pr.ok) throw new Error('Update failed');
+                            alert('✅ Version saved');
+                            document.getElementById('letter-editor-wrap').style.display = 'none';
+                            saveBtn.onclick = origHandler;
+                            this.fetchLettersList();
+                        } catch (err) {
+                            console.error(err);
+                            alert('❌ Save failed');
+                            saveBtn.onclick = origHandler;
+                        }
+                    };
+                } catch (err) {
+                    console.error(err);
+                    alert('Failed to load letter');
+                }
+            },
+
+            async deleteLetter(id) {
+                if (!confirm('Delete this letter?')) return;
+                const token = localStorage.getItem('authToken');
+                if (!token) return alert('Login to delete server letters');
+                try {
+                    const res = await fetch(`/api/letters/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('Delete failed');
+                    alert('✅ Deleted');
+                    this.fetchLettersList();
+                } catch (err) {
+                    console.error(err);
+                    alert('❌ Delete failed');
+                }
+            },
+
+            // Local-only helpers
+            showLetterLocal(id) {
+                const letters = JSON.parse(localStorage.getItem('letters') || '[]');
+                const l = letters.find(x=>x.id===id);
+                if (!l) return alert('Not found');
+                const versionsHtml = (l.versions||[]).map(v=>`<div style="border-left:3px solid #eee;padding-left:8px;margin-top:8px;color:#666;font-size:13px;"><div style="font-size:12px;color:#999;">Edited: ${new Date(v.editedAt).toLocaleString()}</div>${v.body}</div>`).join('');
+                const modal = document.createElement('div');
+                modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;';
+                modal.innerHTML = `
+                  <div style="background:white;padding:20px;border-radius:12px;max-width:800px;width:94%;max-height:80vh;overflow:auto;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;"><h3>Local Letter</h3><button onclick="this.closest('div').parentElement.parentElement.remove()">Close</button></div>
+                    <div style="background:#fafafa;padding:12px;border-radius:8px;margin-top:8px;">${l.body}</div>
+                    <h4 style="margin-top:14px;color:#666;">Version history</h4>
+                    ${versionsHtml || '<div style="color:#888">No previous versions</div>'}
+                  </div>
+                `;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', (e)=>{ if (e.target === modal) modal.remove(); });
+            },
+
+            editLetterLocal(id) {
+                const letters = JSON.parse(localStorage.getItem('letters') || '[]');
+                const idx = letters.findIndex(x=>x.id===id);
+                if (idx === -1) return alert('Not found');
+                const l = letters[idx];
+                document.getElementById('letter-editor-wrap').style.display = 'block';
+                document.getElementById('letter-editor').innerHTML = l.body;
+                document.getElementById('letter-unlock').value = l.unlockAt ? new Date(l.unlockAt).toISOString().slice(0,10) : '';
+                const saveBtn = document.getElementById('letter-save-btn');
+                const origHandler = saveBtn.onclick;
+                saveBtn.onclick = () => {
+                    const newBody = document.getElementById('letter-editor').innerHTML;
+                    // push previous body into versions
+                    letters[idx].versions = letters[idx].versions || [];
+                    letters[idx].versions.push({ body: letters[idx].body, editedAt: new Date().toISOString() });
+                    letters[idx].body = newBody;
+                    letters[idx].unlockAt = document.getElementById('letter-unlock').value ? new Date(document.getElementById('letter-unlock').value).toISOString() : null;
+                    localStorage.setItem('letters', JSON.stringify(letters));
+                    saveBtn.onclick = origHandler;
+                    document.getElementById('letter-editor-wrap').style.display = 'none';
+                    this.fetchLettersList();
+                };
+            },
+
+            deleteLetterLocal(id) {
+                if (!confirm('Delete this local letter?')) return;
+                let letters = JSON.parse(localStorage.getItem('letters') || '[]');
+                letters = letters.filter(l => l.id !== id);
+                localStorage.setItem('letters', JSON.stringify(letters));
+                this.fetchLettersList();
+            },
+
+            // ===== PROMISES (Kanban board) =====
+            getPromisesPage() {
+                return `
+                  <h2 style="color:var(--primary);margin-bottom:10px;">🤝 Promises</h2>
+                  <p style="color:#666;margin-bottom:15px;">Create promises to keep track. Move them across Open → Doing → Done when you make progress.</p>
+
+                  <div class="card" style="margin-bottom:18px;">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+                      <div style="flex:1;min-width:200px;">
+                        <label style="color:#666;font-size:13px;display:block;margin-bottom:6px;">New Promise Title</label>
+                        <input id="promise-title" type="text" placeholder="e.g. Learn to cook pasta..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee;">
+                      </div>
+                      <div style="flex:1;min-width:160px;">
+                        <label style="color:#666;font-size:13px;display:block;margin-bottom:6px;">Due Date (optional)</label>
+                        <input id="promise-due" type="date" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee;">
+                      </div>
+                      <button id="promise-add-btn" class="btn btn-primary">➕ Add</button>
+                    </div>
+                    <div style="margin-top:10px;">
+                      <textarea id="promise-desc" placeholder="Optional description..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee;min-height:60px;"></textarea>
+                    </div>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;">
+                    <div class="card" style="padding:14px;">
+                      <h4 style="color:var(--secondary);margin-top:0;margin-bottom:12px;">📝 Open</h4>
+                      <div id="promises-open" style="min-height:100px;display:flex;flex-direction:column;gap:8px;"></div>
+                    </div>
+                    <div class="card" style="padding:14px;">
+                      <h4 style="color:var(--secondary);margin-top:0;margin-bottom:12px;">⚡ Doing</h4>
+                      <div id="promises-doing" style="min-height:100px;display:flex;flex-direction:column;gap:8px;"></div>
+                    </div>
+                    <div class="card" style="padding:14px;">
+                      <h4 style="color:var(--secondary);margin-top:0;margin-bottom:12px;">✅ Done</h4>
+                      <div id="promises-done" style="min-height:100px;display:flex;flex-direction:column;gap:8px;"></div>
+                    </div>
+                  </div>
+                `;
+            },
+
+            async setupPromisesListeners() {
+                const titleInput = document.getElementById('promise-title');
+                const descInput = document.getElementById('promise-desc');
+                const dueInput = document.getElementById('promise-due');
+                const addBtn = document.getElementById('promise-add-btn');
+
+                if (!addBtn) return;
+
+                addBtn.addEventListener('click', async () => {
+                    const title = titleInput.value.trim();
+                    const description = descInput.value.trim();
+                    const dueDate = dueInput.value ? new Date(dueInput.value).toISOString() : null;
+                    if (!title) return alert('Please enter a promise title.');
+
+                    const token = localStorage.getItem('authToken');
+                    if (token) {
+                        try {
+                            const res = await fetch('/api/promises', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                body: JSON.stringify({ title, description, dueDate })
+                            });
+                            if (!res.ok) throw new Error('Failed to create');
+                            alert('✅ Promise added');
+                            titleInput.value = '';
+                            descInput.value = '';
+                            dueInput.value = '';
+                            this.fetchPromisesList();
+                        } catch (err) {
+                            console.error(err);
+                            alert('❌ Failed. Saving locally.');
+                            this.savePromiseLocal(title, description, dueDate);
+                        }
+                    } else {
+                        this.savePromiseLocal(title, description, dueDate);
+                        titleInput.value = '';
+                        descInput.value = '';
+                        dueInput.value = '';
+                    }
+                });
+
+                this.fetchPromisesList();
+            },
+
+            savePromiseLocal(title, description, dueDate) {
+                const promises = JSON.parse(localStorage.getItem('promises') || '[]');
+                const p = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    dueDate,
+                    status: 'open',
+                    createdAt: new Date().toISOString()
+                };
+                promises.push(p);
+                localStorage.setItem('promises', JSON.stringify(promises));
+                this.fetchPromisesList();
+            },
+
+            async fetchPromisesList() {
+                const openEl = document.getElementById('promises-open');
+                const doingEl = document.getElementById('promises-doing');
+                const doneEl = document.getElementById('promises-done');
+                if (!openEl) return;
+
+                openEl.innerHTML = '<p style="color:#999;font-size:13px;">Loading...</p>';
+                doingEl.innerHTML = '';
+                doneEl.innerHTML = '';
+
+                const token = localStorage.getItem('authToken');
+                let promises = [];
+
+                if (token) {
+                    try {
+                        const res = await fetch('/api/promises', {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (!res.ok) throw new Error('Failed');
+                        promises = await res.json();
+                    } catch (err) {
+                        console.error(err);
+                        promises = JSON.parse(localStorage.getItem('promises') || '[]');
+                    }
+                } else {
+                    promises = JSON.parse(localStorage.getItem('promises') || '[]');
+                }
+
+                const renderPromises = (status, container) => {
+                    const filtered = promises.filter(p => p.status === status);
+                    if (filtered.length === 0) {
+                        container.innerHTML = `<p style="color:#999;font-size:13px;">No promises yet</p>`;
+                        return;
+                    }
+                    container.innerHTML = filtered.map(p => `
+                        <div style="background:#faf8fc;padding:10px;border-radius:8px;border-left:4px solid ${status==='done'?'#4caf50':status==='doing'?'#ff9800':'#2196f3'};cursor:pointer;transition:all .2s ease;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">
+                          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                            <div style="flex:1;">
+                              <strong style="font-size:14px;">${p.title}</strong>
+                              ${p.description ? `<div style="color:#777;font-size:12px;margin-top:4px;">${p.description}</div>` : ''}
+                              <div style="color:#999;font-size:11px;margin-top:4px;">${p.dueDate ? 'Due: ' + new Date(p.dueDate).toLocaleDateString() : 'No due date'}</div>
+                            </div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+                              ${status !== 'open' ? `<button class="btn" onclick="App.updatePromiseStatus('${p._id || p.id}','open')" style="padding:4px 8px;font-size:11px;">← Open</button>` : ''}
+                              ${status !== 'doing' ? `<button class="btn" onclick="App.updatePromiseStatus('${p._id || p.id}','doing')" style="padding:4px 8px;font-size:11px;">⚡ Doing</button>` : ''}
+                              ${status !== 'done' ? `<button class="btn" onclick="App.updatePromiseStatus('${p._id || p.id}','done')" style="padding:4px 8px;font-size:11px;">✅ Done</button>` : ''}
+                              <button class="btn" onclick="App.deletePromise('${p._id || p.id}')" style="padding:4px 8px;font-size:11px;">🗑️</button>
+                            </div>
+                          </div>
+                        </div>
+                    `).join('');
+                };
+
+                renderPromises('open', openEl);
+                renderPromises('doing', doingEl);
+                renderPromises('done', doneEl);
+            },
+
+            async updatePromiseStatus(id, newStatus) {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        const res = await fetch(`/api/promises/${id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                            body: JSON.stringify({ status: newStatus })
+                        });
+                        if (!res.ok) throw new Error('Failed');
+                        if (newStatus === 'done') {
+                            this.triggerConfetti();
+                        }
+                        this.fetchPromisesList();
+                    } catch (err) {
+                        console.error(err);
+                        alert('Failed to update');
+                    }
+                } else {
+                    // Local update
+                    const promises = JSON.parse(localStorage.getItem('promises') || '[]');
+                    const idx = promises.findIndex(p => p.id === id);
+                    if (idx !== -1) {
+                        promises[idx].status = newStatus;
+                        localStorage.setItem('promises', JSON.stringify(promises));
+                        if (newStatus === 'done') this.triggerConfetti();
+                        this.fetchPromisesList();
+                    }
+                }
+            },
+
+            async deletePromise(id) {
+                if (!confirm('Delete this promise?')) return;
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    try {
+                        const res = await fetch(`/api/promises/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (!res.ok) throw new Error('Failed');
+                        alert('✅ Deleted');
+                        this.fetchPromisesList();
+                    } catch (err) {
+                        console.error(err);
+                        alert('❌ Delete failed');
+                    }
+                } else {
+                    let promises = JSON.parse(localStorage.getItem('promises') || '[]');
+                    promises = promises.filter(p => p.id !== id);
+                    localStorage.setItem('promises', JSON.stringify(promises));
+                    this.fetchPromisesList();
+                }
+            },
+
+            triggerConfetti() {
+                // Simple confetti animation
+                const colors = ['#ff6b9d', '#c44569', '#ffc3a0', '#ffeaa7', '#ff9999'];
+                for (let i = 0; i < 40; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position:fixed;
+                        left:${Math.random()*100}%;
+                        top:0;
+                        width:10px;
+                        height:10px;
+                        background:${colors[Math.floor(Math.random()*colors.length)]};
+                        border-radius:50%;
+                        z-index:9999;
+                        pointer-events:none;
+                        animation:confettiFall ${2+Math.random()*1}s ease-in forwards;
+                    `;
+                    document.body.appendChild(confetti);
+                }
+            },
+
+            // continue with settings page...
+            getSettingsPage() {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const currentEmail = localStorage.getItem('currentUserEmail');
+                let usersHTML = users.length > 0
+                  ? users.map(u => {
+                      if (u.email === 'admin@example.com') {
+                        return `<li><strong>${u.email}</strong> <button onclick=\"App.showLocation('${u.email}')\">📍 Location</button> <span style=\"color:#888;margin-left:10px;\">(Admin cannot be removed)</span></li>`;
+                      } else {
+                        return `<li>${u.email} <button onclick=\"App.showLocation('${u.email}')\">📍 Location</button> <button onclick=\"App.removeUser('${u.email}')\" style=\"margin-left:10px;\">🗑️ Remove</button></li>`;
+                      }
+                    }).join('')
+                  : '<li style="color:#888;">No users added yet.</li>';
+                return `
+                  <h2 style="color:var(--primary);margin-bottom:30px;">⚙️ Settings</h2>
+                  <div class="card" style="margin-bottom:30px;">
+                    <h3 style="color:var(--secondary);margin-bottom:15px;">Add New User</h3>
+                    <form id="add-user-form">
+                      <div class="form-group">
+                        <label for="new-user-email">Email Address</label>
+                        <input type="email" id="new-user-email" placeholder="Enter email address" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="new-user-password">Password</label>
+                        <input type="password" id="new-user-password" placeholder="Enter password" required>
+                      </div>
+                      <button type="submit" class="btn btn-primary">➕ Add User</button>
+                    </form>
+                  </div>
+                  <h3 style="color:var(--secondary);margin-bottom:20px;">Current Users</h3>
+                  <ul>${usersHTML}</ul>
+                  <div id="location-modal" style="display:none;position:fixed;top:20%;left:50%;transform:translateX(-50%);background:white;padding:30px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:2000;"></div>
+                `;
+            },
+
+            setupSettingsListeners() {
+                const form = document.getElementById('add-user-form');
+                if (form) {
+                  form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('new-user-email').value.trim().toLowerCase();
+                    const password = document.getElementById('new-user-password').value;
+                    if (email && password) {
+                      let users = JSON.parse(localStorage.getItem('users') || '[]');
+                      if (users.some(u => u.email === email)) {
+                        alert('❌ User already exists!');
+                        return;
+                      }
+                      users.push({ email, password, location: null });
+                      localStorage.setItem('users', JSON.stringify(users));
+                      alert('✅ User added!');
+                      App.goToPage('settings');
+                    }
+                  });
+                }
+              },
+
+              removeUser(email) {
+                const currentEmail = localStorage.getItem('currentUserEmail');
+                if (currentEmail !== 'admin@example.com') {
+                  alert('Only the admin can remove users.');
+                  return;
+                }
+                if (email === 'admin@example.com') {
+                  alert('Admin account cannot be removed.');
+                  return;
+                }
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                users = users.filter(u => u.email !== email);
+                localStorage.setItem('users', JSON.stringify(users));
+                this.goToPage('settings');
+              },
+
+              showLocation(email) {
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email);
+                if (!user) return;
+                if (!user.location) {
+                  if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(pos) {
+                      user.location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                      localStorage.setItem('users', JSON.stringify(users));
+                      App.displayLocationModal(email, user.location);
+                    }, function() {
+                      App.displayLocationModal(email, null);
+                    });
+                  } else {
+                    App.displayLocationModal(email, null);
+                  }
+                } else {
+                  App.displayLocationModal(email, user.location);
+                }
+              },
+
+              displayLocationModal(email, location) {
+                const modal = document.getElementById('location-modal');
+                if (!modal) return;
+                if (location) {
+                  modal.innerHTML = `<h3>Location for ${email}</h3><p>Latitude: ${location.lat}<br>Longitude: ${location.lng}</p><button onclick="document.getElementById('location-modal').style.display='none'">Close</button>`;
+                } else {
+                  modal.innerHTML = `<h3>Location for ${email}</h3><p>Location not available or permission denied.</p><button onclick="document.getElementById('location-modal').style.display='none'">Close</button>`;
+                }
+                modal.style.display = 'block';
+              },
+
+            // Removed: approveSignup, rejectSignup, downloadAllUsersHistory functions
+            // All users are auto-created on signup; no approval workflow
+            // Search history download feature removed per configuration
+
+            // Sync listeners for multi-device updates
+            initSyncListeners() {
+                window.addEventListener('storage', (e) => {
+                    // listen for base keys or sync-timestamp keys
+                    const interesting = ['notes','gallery','wishes','diaries','diaries_sync_ts','gallery_sync_ts','draw_sync_ts'];
+                    if (!e.key) return;
+                    if (interesting.includes(e.key) || interesting.some(k=>e.key && e.key.indexOf(k)===0)) {
+                        // Refresh the current page if appropriate
+                        const page = this.getPageFromKey(e.key.replace('_sync_ts',''));
+                        if (this.isLoggedIn && page && this.currentPage === page) {
+                            this.goToPage(this.currentPage);
+                        }
+                        // If on diary page, reload diaries for selected date
+                        if (this.currentPage === 'diary' && document.getElementById('selected-date-display')) {
+                            this.loadDiariesForDate(this.selectedDiaryDate || this.formatDate(new Date()));
+                        }
+                        if (this.currentPage === 'gallery') {
+                            // refresh gallery
+                            this.goToPage('gallery');
+                        }
+                    }
+                });
+            },
+
+            getPageFromKey(key) {
+                const mapping = { 'notes': 'notes', 'gallery': 'gallery', 'wishes': 'wishes', 'diaries': 'diary' };
+                return mapping[key] || null;
+            },
+
+            updateCountdown() {
+                // Starting date: 1 year and 18 days ago from today (Nov 12, 2025)
+                // That would be October 25, 2024
+                const startDate = new Date('2024-10-25').getTime();
+                const now = new Date().getTime();
+                const diff = now - startDate;
+
+                if (diff > 0) {
+                    // Calculate years, days, hours, minutes, seconds
+                    let totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const years = Math.floor(totalDays / 365);
+                    const remainingDaysAfterYears = totalDays % 365;
+                    const days = remainingDaysAfterYears;
+                    
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    if (document.getElementById('years')) document.getElementById('years').textContent = years;
+                    if (document.getElementById('days')) document.getElementById('days').textContent = days;
+                    if (document.getElementById('hours')) document.getElementById('hours').textContent = hours;
+                    if (document.getElementById('minutes')) document.getElementById('minutes').textContent = minutes;
+                    if (document.getElementById('seconds')) document.getElementById('seconds').textContent = seconds;
+                }
+            }
+        };
+
+        window.addEventListener('load', () => App.init());
+    </script>
+</body>
+</html>
